@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +29,9 @@ import java.util.List;
 public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.CustomBoatHolder> {
     private List<Boat> boatList;
 
+    public interface OnCardClickedListener{
+        void onCardClicked(View view);
+    }
     /**
      * Created by mookie on 10/30/15.
      * for Nerd.Solutions
@@ -39,8 +44,10 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         protected TextView firstYear;
         protected TextView lastYear;
 
+        protected View itemView;
         public CustomBoatHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             this.titleText=(TextView)itemView.findViewById(R.id.title);
             this.boatImage=(ImageView)itemView.findViewById(R.id.boatThumbnail);
             this.rigText=(TextView)itemView.findViewById(R.id.rig_type);
@@ -56,6 +63,10 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         super.onAttachedToRecyclerView(recyclerView);
     }
 
+    private OnCardClickedListener mListener;
+    public void setOnCardClickedListener(OnCardClickedListener listener){
+        mListener=listener;
+    }
     @Override
     public CustomBoatHolder onCreateViewHolder(ViewGroup viewGroup,int position){
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.boat_row_layout, null);
@@ -63,8 +74,8 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                flipCard();
+                if (mListener!=null)
+                    mListener.onCardClicked(v);
             }
         });
         return new CustomBoatHolder(view);
@@ -79,11 +90,24 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         mContext=context;
     }
 
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition)
+        {
+            Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
+    private int lastPosition = -1;
+
 
     @Override
     public void onBindViewHolder(final CustomBoatHolder customBoatHolder, int i) {
         Boat boatItem = boatList.get(i);
 
+    setAnimation(customBoatHolder.itemView,i);
 
         //Download image using picasso library
 /*        Picasso.with(mContext).load(feedItem.getThumbnail())
@@ -98,7 +122,6 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         customBoatHolder.lastYear.setText(boatItem.getLast_build());
         customBoatHolder.titleText.setText(boatItem.getTitle());
 
-
         String img = boatItem.getImage(0);
         if (img!=null&&!img.isEmpty()){
             new ImageLoaderTask(new OnImageRetrieved() {
@@ -109,6 +132,8 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
             }).execute(img);
 
         }
+
+
 
     }
 
@@ -121,6 +146,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         view.setVisibility(value.isEmpty()?View.INVISIBLE:View.VISIBLE);
         view.setText(value);
     }
+
 
     public interface OnImageRetrieved{
         void imageReceived(Bitmap bitmap);

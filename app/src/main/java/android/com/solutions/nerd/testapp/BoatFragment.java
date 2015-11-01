@@ -1,11 +1,13 @@
 package android.com.solutions.nerd.testapp;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.com.solutions.nerd.testapp.model.Boat;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -109,18 +111,32 @@ public class BoatFragment extends Fragment
         protected void onPostExecute(List<Boat> boats) {
             boatList=boats;
 
-  //          View view = getView();
-//           mRecyclerView = (RecyclerView)view.findViewById(R.id.list);
-
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-
-
-            // use a linear layout manager
-
-
             final BoatArrayAdapter adapter = new BoatArrayAdapter(getContext(),boats);
             mRecyclerView.setAdapter(adapter);
+
+
+            adapter.setOnCardClickedListener(new BoatArrayAdapter.OnCardClickedListener() {
+                @Override
+                public void onCardClicked(View view) {
+
+                    int right_in  = R.animator.card_flip_right_in;
+                 Log.d(TAG, "onCardClicked");
+
+                    Snackbar.make(getView(),"Card Clicked",Snackbar.LENGTH_LONG).show();
+/*                    getFragmentManager()
+                            .beginTransaction()
+                            .setCustomAnimations(
+                                    right_in, R.animator.card_flip_right_out,
+                                    R.animator.card_flip_left_in, R.animator.card_flip_left_out)
+                            .replace(R.id.container, new BoatBackFragment())
+
+                            .addToBackStack(null)
+                            .commit();*/
+
+
+
+                }
+            });
 
 
     //        final BoatArrayAdapter adapter = new BoatArrayAdapter(getContext(),android.R.layout.simple_list_item_1, boatArray);
@@ -128,9 +144,23 @@ public class BoatFragment extends Fragment
 
 
 
-            Log.d(TAG,"onPostExecute");
+            Log.d(TAG, "onPostExecute");
     }
     }
 
+    @SuppressLint("ValidFragment")
+    public class BoatFrontFragment extends Fragment{
+        @Override
+        public View onCreateView(LayoutInflater inflator,ViewGroup container,Bundle savedInstanceState){
+            return inflator.inflate(R.layout.boat_row_layout,container,false);
+        }
+    }
 
+    @SuppressLint("ValidFragment")
+    public class BoatBackFragment extends Fragment{
+        @Override
+        public View onCreateView(LayoutInflater inflator,ViewGroup container,Bundle savedInstanceState){
+            return inflator.inflate(R.layout.boat_card_back,container,false);
+        }
+    }
 }
