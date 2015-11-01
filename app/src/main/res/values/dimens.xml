@@ -6,4 +6,12 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_elevation">2dp</dimen>
+    <dimen name="header_radius">5dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+    <dimen name="stream_card_corner_radius">0dp</dimen>
+    <dimen name="card_corner_radius">2dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="padding_normal">16dp</dimen>
+
 </resources>

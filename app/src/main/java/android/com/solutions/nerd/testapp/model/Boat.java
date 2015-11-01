@@ -1,8 +1,5 @@
 package android.com.solutions.nerd.testapp.model;
 
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,16 +31,15 @@ public class Boat  {
     private String last_build="";
 
     public static final String TAG_MAKE="make";
-    private String make="";
 
     public static final String TAG_LAST_YEAR="last_built";
     public String getLast_build(){return last_build;}
 
-    private String disp="";
-    public static final String TAG_DISP="disp";
-    public String getDisp() {return disp;}
+    private String displacement ="";
+    public static final String TAG_DISPLACEMENT ="disp";
+    public String getDisplacement() {return displacement;}
 
-    public static final String TAG_SA_DISP="sa_disp";
+    public static final String TAG_SA_DISPLACEMENT ="sa_disp";
     private String sa_disp="";
     public String getSa_disp() {return sa_disp;}
 
@@ -166,7 +162,12 @@ public class Boat  {
     public static final String TAG_IMAGES="images";
     public String[] getImages(){return images;}
 
-    public String getImage(int position){return images[position];}
+    public String getImage(int position){
+
+        if (images==null)
+            return "";
+        return images[position];
+    }
 
     public Boat(JSONObject boat){
         try {
@@ -262,8 +263,9 @@ public class Boat  {
             if (boat.has(TAG_LOA))
                 loa=boat.getString(TAG_LOA);
 
+            String make = "";
             if (boat.has(TAG_MAKE))
-                make=boat.getString(TAG_MAKE);
+                make =boat.getString(TAG_MAKE);
 
 
 

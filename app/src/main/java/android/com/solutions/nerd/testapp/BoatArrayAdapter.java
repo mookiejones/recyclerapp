@@ -6,12 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.BufferedInputStream;
@@ -26,43 +24,66 @@ import java.util.List;
  * Created by mookie on 10/29/15.
  * for Nerd.Solutions
  */
-public class BoatArrayAdapter extends RecyclerView.Adapter<CustomBoatHolder> {
-    private final Context context;
+public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.CustomBoatHolder> {
     private List<Boat> boatList;
 
+    /**
+     * Created by mookie on 10/30/15.
+     * for Nerd.Solutions
+     */
+    public static  class CustomBoatHolder extends RecyclerView.ViewHolder{
+        protected ImageView boatImage;
+        protected TextView designerText;
+        protected TextView titleText;
+        protected TextView rigText;
+        protected TextView firstYear;
+        protected TextView lastYear;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView mTextView;
-        public ViewHolder(TextView v) {
-            super(v);
-            mTextView = v;
+        public CustomBoatHolder(View itemView) {
+            super(itemView);
+            this.titleText=(TextView)itemView.findViewById(R.id.title);
+            this.boatImage=(ImageView)itemView.findViewById(R.id.boatThumbnail);
+            this.rigText=(TextView)itemView.findViewById(R.id.rig_type);
+            this.firstYear=(TextView)itemView.findViewById(R.id.first_year);
+            this.lastYear=(TextView)itemView.findViewById(R.id.last_year);
+            this.designerText=(TextView)itemView.findViewById(R.id.designer);
         }
     }
 
 
     @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
     public CustomBoatHolder onCreateViewHolder(ViewGroup viewGroup,int position){
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.boat_row_layout, null);
 
-        CustomBoatHolder viewHolder = new CustomBoatHolder(view);
-        return viewHolder;
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+//                flipCard();
+            }
+        });
+        return new CustomBoatHolder(view);
     }
 
+    private boolean mShowingBack;
 
 
+    private final Context mContext;
     public BoatArrayAdapter(Context context,List<Boat> boatList){
         this.boatList=boatList;
-        this.context=context;
+        mContext=context;
     }
 
 
     @Override
-    public void onBindViewHolder(CustomBoatHolder customBoatHolder, int i) {
+    public void onBindViewHolder(final CustomBoatHolder customBoatHolder, int i) {
         Boat boatItem = boatList.get(i);
+
 
         //Download image using picasso library
 /*        Picasso.with(mContext).load(feedItem.getThumbnail())
@@ -75,6 +96,20 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<CustomBoatHolder> {
         customBoatHolder.designerText.setText(boatItem.getDesigner());
         customBoatHolder.firstYear.setText(boatItem.getFirst_build());
         customBoatHolder.lastYear.setText(boatItem.getLast_build());
+        customBoatHolder.titleText.setText(boatItem.getTitle());
+
+
+        String img = boatItem.getImage(0);
+        if (img!=null&&!img.isEmpty()){
+            new ImageLoaderTask(new OnImageRetrieved() {
+                @Override
+                public void imageReceived(Bitmap bitmap) {
+                    customBoatHolder.boatImage.setImageBitmap(bitmap);
+                }
+            }).execute(img);
+
+        }
+
     }
 
     @Override
@@ -88,7 +123,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<CustomBoatHolder> {
     }
 
     public interface OnImageRetrieved{
-        void imageRecieved(Bitmap bitmap);
+        void imageReceived(Bitmap bitmap);
     }
     public class ImageLoaderTask extends AsyncTask<String,Bitmap,Bitmap>{
         private  OnImageRetrieved mOnImageRetrieved;
@@ -100,26 +135,19 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<CustomBoatHolder> {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            mOnImageRetrieved.imageRecieved(bitmap);
+            mOnImageRetrieved.imageReceived(bitmap);
         }
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            HttpURLConnection urlConnection = null;
+            HttpURLConnection urlConnection;
             try{
             String urlString = "http://sailsite.meteor.com/"+params[0]+".jpg";
             URL url = new URL(urlString);
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            Bitmap result = BitmapFactory.decodeStream(in);
-                return result;
+                return BitmapFactory.decodeStream(in);
 
-
-
-
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
