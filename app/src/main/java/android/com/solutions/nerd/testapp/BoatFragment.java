@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class BoatFragment extends Fragment
     implements ITextQueryListener
 {
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private BoatArrayAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private static final String TAG = BoatFragment.class.getSimpleName();
     private static BoatFragment instance;
@@ -47,32 +48,35 @@ public class BoatFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+
+        mAdapter = new BoatArrayAdapter(getContext(),new ArrayList<Boat>());
+
         Log.d(TAG, "onCreateView");
 
         View view = inflater.inflate(R.layout.boat_fragment,null);
-//        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
 
         mRecyclerView = (RecyclerView)view.findViewById(R.id.list);
-
-        mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(mAdapter);
 
-
-
-
+        OnTextChanged("Irwin");
 
         return view;
     }
 
+
+    BoatParser mParser;
     @Override
     public void OnTextChanged(String queryText) {
         Log.d(TAG, queryText);
-        new BoatParser().execute(queryText);
-
+        if(mParser!=null)
+            mParser.cancel(true);
+        mParser= new BoatParser();
+        mParser.execute(queryText);
     }
 
     @Override
@@ -93,9 +97,13 @@ public class BoatFragment extends Fragment
 
     List<Boat> boatList;
 
+    private interface OnBoatParserCompleteListener {
+       void OnPostExecute(List<Boat> boats);
+    }
+
 
     private class BoatParser extends AsyncTask<String ,String,List<Boat>>{
-        private ProgressDialog progressDialog;
+
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
@@ -110,8 +118,7 @@ public class BoatFragment extends Fragment
         @Override
         protected void onPostExecute(List<Boat> boats) {
             boatList=boats;
-
-            final BoatArrayAdapter adapter = new BoatArrayAdapter(getContext(),boats);
+            BoatArrayAdapter adapter=new BoatArrayAdapter(getContext(),boatList);
             mRecyclerView.setAdapter(adapter);
 
 
@@ -137,11 +144,6 @@ public class BoatFragment extends Fragment
 
                 }
             });
-
-
-    //        final BoatArrayAdapter adapter = new BoatArrayAdapter(getContext(),android.R.layout.simple_list_item_1, boatArray);
-  //          list.setAdapter(adapter);
-
 
 
             Log.d(TAG, "onPostExecute");

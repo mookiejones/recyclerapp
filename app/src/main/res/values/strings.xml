@@ -22,4 +22,5 @@
     <string name="rig_type">Rig Type</string>
     <string name="spacer">/</string>
     <string name="designer">designer</string>
+    <string name="boat_image_description">BoatImage</string>
 </resources>

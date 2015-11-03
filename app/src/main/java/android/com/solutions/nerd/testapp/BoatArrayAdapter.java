@@ -2,10 +2,9 @@ package android.com.solutions.nerd.testapp;
 
 import android.com.solutions.nerd.testapp.model.Boat;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -36,24 +31,28 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
      * Created by mookie on 10/30/15.
      * for Nerd.Solutions
      */
+
     public static  class CustomBoatHolder extends RecyclerView.ViewHolder{
+        private CardView cardView;
+
         protected ImageView boatImage;
         protected TextView designerText;
         protected TextView titleText;
         protected TextView rigText;
-        protected TextView firstYear;
-        protected TextView lastYear;
+        protected TextView boatYears;
 
         protected View itemView;
         public CustomBoatHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
+            this.cardView=(CardView)itemView.findViewById(R.id.card_view);
+            this.boatYears=(TextView)itemView.findViewById(R.id.yearText);
             this.titleText=(TextView)itemView.findViewById(R.id.title);
             this.boatImage=(ImageView)itemView.findViewById(R.id.boatThumbnail);
             this.rigText=(TextView)itemView.findViewById(R.id.rig_type);
-            this.firstYear=(TextView)itemView.findViewById(R.id.first_year);
-            this.lastYear=(TextView)itemView.findViewById(R.id.last_year);
             this.designerText=(TextView)itemView.findViewById(R.id.designer);
+
+//            cardView.setPreventCornerOverlap(false);
         }
     }
 
@@ -63,13 +62,17 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         super.onAttachedToRecyclerView(recyclerView);
     }
 
+    private static final String TAG = BoatArrayAdapter.class.getSimpleName();
     private OnCardClickedListener mListener;
     public void setOnCardClickedListener(OnCardClickedListener listener){
         mListener=listener;
     }
     @Override
     public CustomBoatHolder onCreateViewHolder(ViewGroup viewGroup,int position){
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.boat_row_layout, null);
+        Log.d(TAG,"onCreateViewHolder");
+
+        Context context = viewGroup.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.boat_row_layout,null);
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,32 +108,34 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
 
     @Override
     public void onBindViewHolder(final CustomBoatHolder customBoatHolder, int i) {
+
         Boat boatItem = boatList.get(i);
 
-    setAnimation(customBoatHolder.itemView,i);
+        setAnimation(customBoatHolder.itemView,i);
 
-        //Download image using picasso library
-/*        Picasso.with(mContext).load(feedItem.getThumbnail())
-                .error(R.drawable.placeholder)
-                .placeholder(R.drawable.placeholder)
-                .into(customViewHolder.imageView);*/
 
-        //Setting text view title
-//        customBoatHolder.boatImage.textView.setText(Html.fromHtml(feedItem.getTitle()));
+        // Get boat Years
+        String boatYears=boatItem.getFirst_build();
+
+
+        String lastYear=boatItem.getLast_build();
+        if (lastYear.length()>0)
+            boatYears+=" / "+lastYear;
+        customBoatHolder.boatYears.setText(boatYears);
+
+
         customBoatHolder.designerText.setText(boatItem.getDesigner());
-        customBoatHolder.firstYear.setText(boatItem.getFirst_build());
-        customBoatHolder.lastYear.setText(boatItem.getLast_build());
         customBoatHolder.titleText.setText(boatItem.getTitle());
+        customBoatHolder.rigText.setText(boatItem.getRig_type());
+
+
 
         String img = boatItem.getImage(0);
-        if (img!=null&&!img.isEmpty()){
-            new ImageLoaderTask(new OnImageRetrieved() {
-                @Override
-                public void imageReceived(Bitmap bitmap) {
-                    customBoatHolder.boatImage.setImageBitmap(bitmap);
-                }
-            }).execute(img);
 
+        if (img!=null&&!img.isEmpty()){
+            String urlString = "http://sailsite.meteor.com/"+img+".jpg";
+            Picasso.with(mContext).load(urlString)
+                    .into(customBoatHolder.boatImage);
         }
 
 
@@ -142,45 +147,6 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         return (null != boatList ? boatList.size() : 0);
     }
 
-    private void setText(final TextView view,final String value){
-        view.setVisibility(value.isEmpty()?View.INVISIBLE:View.VISIBLE);
-        view.setText(value);
-    }
 
-
-    public interface OnImageRetrieved{
-        void imageReceived(Bitmap bitmap);
-    }
-    public class ImageLoaderTask extends AsyncTask<String,Bitmap,Bitmap>{
-        private  OnImageRetrieved mOnImageRetrieved;
-        public ImageLoaderTask(OnImageRetrieved listener){
-            mOnImageRetrieved=listener;
-        }
-
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            mOnImageRetrieved.imageReceived(bitmap);
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            HttpURLConnection urlConnection;
-            try{
-            String urlString = "http://sailsite.meteor.com/"+params[0]+".jpg";
-            URL url = new URL(urlString);
-            urlConnection = (HttpURLConnection) url.openConnection();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                return BitmapFactory.decodeStream(in);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            return null;
-        }
-    }
 
 }

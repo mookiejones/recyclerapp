@@ -29,39 +29,6 @@ public class JsonParser {
     public JsonParser() {
     }
 
-    public JSONArray getJsonArrayFromURL(String args){
-        HttpURLConnection urlConnection = null;
-        List<Boat> boats = new ArrayList<>();
-
-        try {
-
-            URL url = new URL("http://sailsite.meteor.com/api/"+args);
-            urlConnection = (HttpURLConnection) url.openConnection();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            json= readStream(in);
-
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-            urlConnection.disconnect();
-        }
-
-        // try parse the string to a JSON object
-        try {
-            jArray=new JSONArray(json);
-            return jArray;
-
-
-        } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
-        }
-
-        // return JSON String
-        return jArray;
-    }
-
     public List<Boat> getBoatsFromUrl(String args) {
         HttpURLConnection urlConnection = null;
         List<Boat> boats = new ArrayList<>();

@@ -43,6 +43,14 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        // Set Initial fragment
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container,BoatFragment.getInstance())
+                .commit();
+
     }
 
     @Override
