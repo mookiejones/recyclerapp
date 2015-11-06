@@ -1,6 +1,6 @@
 package android.com.solutions.nerd.testapp;
 
-import android.com.solutions.nerd.testapp.model.Boat;
+import android.com.solutions.nerd.testapp.boat.Boat;
 import android.util.Log;
 
 import org.json.JSONArray;

@@ -1,25 +1,22 @@
 package android.com.solutions.nerd.testapp.boat;
 
-import android.annotation.SuppressLint;
 import android.com.solutions.nerd.testapp.ITextQueryListener;
 import android.com.solutions.nerd.testapp.JsonParser;
 import android.com.solutions.nerd.testapp.R;
 import android.com.solutions.nerd.testapp.main.MainActivity;
-import android.com.solutions.nerd.testapp.model.Boat;
 import android.com.solutions.nerd.testapp.utils.LogUtils;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +29,6 @@ public class BoatFragment extends Fragment
     implements ITextQueryListener
 {
     private RecyclerView mRecyclerView;
-    private BoatArrayAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private static final String TAG = LogUtils.getLogTag(BoatFragment.class);
 
     private static BoatFragment instance;
@@ -50,7 +45,7 @@ public class BoatFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
-        mAdapter = new BoatArrayAdapter(getContext(),new ArrayList<Boat>());
+        BoatArrayAdapter mAdapter = new BoatArrayAdapter(getContext(), new ArrayList<Boat>());
 
         Log.d(TAG, "onCreateView");
 
@@ -59,8 +54,10 @@ public class BoatFragment extends Fragment
         mRecyclerView = (RecyclerView)view.findViewById(R.id.list);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -98,9 +95,7 @@ public class BoatFragment extends Fragment
 
     List<Boat> boatList;
 
-    private interface OnBoatParserCompleteListener {
-       void OnPostExecute(List<Boat> boats);
-    }
+
 
 
     private class BoatParser extends AsyncTask<String ,String,List<Boat>>{
@@ -123,45 +118,12 @@ public class BoatFragment extends Fragment
             mRecyclerView.setAdapter(adapter);
 
 
-            adapter.setOnCardClickedListener(new BoatArrayAdapter.OnCardClickedListener() {
-                @Override
-                public void onCardClicked(View view) {
-                    int right_in  = R.animator.card_flip_right_in;
-                 Log.d(TAG, "onCardClicked");
-                    Snackbar.make(getView(),"Card Clicked",Snackbar.LENGTH_LONG).show();
-/*                    getFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(
-                                    right_in, R.animator.card_flip_right_out,
-                                    R.animator.card_flip_left_in, R.animator.card_flip_left_out)
-                            .replace(R.id.container, new BoatBackFragment())
 
-                            .addToBackStack(null)
-                            .commit();*/
-
-
-
-                }
-            });
 
 
             Log.d(TAG, "onPostExecute");
     }
     }
 
-    @SuppressLint("ValidFragment")
-    public class BoatFrontFragment extends Fragment{
-        @Override
-        public View onCreateView(LayoutInflater inflator,ViewGroup container,Bundle savedInstanceState){
-            return inflator.inflate(R.layout.boat_row_layout,container,false);
-        }
-    }
 
-    @SuppressLint("ValidFragment")
-    public class BoatBackFragment extends Fragment{
-        @Override
-        public View onCreateView(LayoutInflater inflator,ViewGroup container,Bundle savedInstanceState){
-            return inflator.inflate(R.layout.boat_card_back,container,false);
-        }
-    }
 }
