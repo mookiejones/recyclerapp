@@ -42,7 +42,7 @@ public class BoatFragment extends Fragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInfatuslater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
         BoatArrayAdapter mAdapter = new BoatArrayAdapter(getContext(), new ArrayList<Boat>());
