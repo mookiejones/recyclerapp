@@ -25,12 +25,321 @@ import java.util.List;
  * for Nerd.Solutions
  */
 public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.CustomBoatHolder> {
+    private static final String TAG = BoatArrayAdapter.class.getSimpleName();
+    private final Context mContext;
     private List<Boat> boatList;
+    private int lastPosition = -1;
+    private float lastX;
+
+
+
+
+    public BoatArrayAdapter(Context context,List<Boat> boatList){
+        this.boatList=boatList;
+        mContext=context;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
+    public CustomBoatHolder onCreateViewHolder(ViewGroup viewGroup,int position){
+        View view = LayoutInflater.from(mContext).inflate(R.layout.boat_row_layout, null);
+        return new CustomBoatHolder(view);
+    }
+
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition)
+        {
+            Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
+
+
+    protected static CustomBoatHolder mSelectedBoat;
+
+    @Override
+    public void onBindViewHolder(final CustomBoatHolder customBoatHolder, int i) {
+
+        Boat boatItem = boatList.get(i);
+
+
+        customBoatHolder.itemView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent touchEvent) {
+
+                if (customBoatHolder.viewFlipper.getDisplayedChild()==0){
+                    // Next screen comes in from left.
+                    customBoatHolder.viewFlipper.setInAnimation(mContext, R.anim.slide_in_from_right);
+                    // Current screen goes out from right.
+                    customBoatHolder.viewFlipper.setOutAnimation(mContext, R.anim.slide_out_to_left);
+
+                    // Display next screen.
+                    customBoatHolder.viewFlipper.showNext();
+                }else{
+
+                    // Next screen comes in from right.
+                    customBoatHolder.viewFlipper.setInAnimation(mContext, R.anim.slide_in_from_left);
+                    // Current screen goes out from left.
+                    customBoatHolder.viewFlipper.setOutAnimation(mContext, R.anim.slide_out_to_right);
+
+                    // Display previous screen.
+                    customBoatHolder.viewFlipper.showPrevious();
+
+                }
+                 return false;
+            }
+        });
+
+        setAnimation(customBoatHolder.itemView, i);
+
+
+        String years="Year(s)";
+
+        // Get boat Years
+        String boatYears=boatItem.getFirst_built();
+
+        if (!boatYears.isEmpty())
+            years+=boatYears;
+
+        String lastYear=boatItem.getLast_built();
+        if (lastYear.length()>0)
+            years+=" / "+lastYear;
+        customBoatHolder.boatYears.setText(years);
+
+
+
+
+        String img = boatItem.getImage(0);
+
+        if (img != null && !img.isEmpty()) {
+            String urlString = "http://sailsite.meteor.com/" + img + ".jpg";
+
+            Picasso
+                    .with(mContext)
+                    .load(urlString)
+                    .into(customBoatHolder.boatImage);
+        }
+
+        String title = boatItem.getTitle();
+        customBoatHolder.titleText.setText(title);
+
+        boolean pass=false;
+        if(pass) {
+
+            //bal_disp
+            String bal_disp = boatItem.getBal_disp();
+            customBoatHolder.bal_disp.setText(bal_disp);
+            customBoatHolder.bal_dispContainer.setVisibility(bal_disp.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //bal_type
+            String bal_type = boatItem.getBal_type();
+            customBoatHolder.bal_type.setText(bal_type);
+            customBoatHolder.bal_typeContainer.setVisibility(bal_type.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //ballast
+            String ballast = boatItem.getBallast();
+            customBoatHolder.ballast.setText(ballast);
+            customBoatHolder.ballastContainer.setVisibility(ballast.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //beam
+            String beam = boatItem.getBeam();
+            customBoatHolder.beam.setText(beam);
+            customBoatHolder.beamContainer.setVisibility(beam.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //builder
+            String builder = boatItem.getBuilder();
+            customBoatHolder.builder.setText(builder);
+            customBoatHolder.builderContainer.setVisibility(builder.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //construct
+            String construct = boatItem.getConstruct();
+            customBoatHolder.construct.setText(construct);
+            customBoatHolder.constructContainer.setVisibility(construct.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //designer
+            String designer = boatItem.getDesigner();
+            customBoatHolder.designer.setText(designer);
+            customBoatHolder.designerContainer.setVisibility(designer.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //disp
+            String disp = boatItem.getDisp();
+            customBoatHolder.disp.setText(disp);
+            customBoatHolder.dispContainer.setVisibility(disp.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //draft_max
+            String draft_max = boatItem.getDraft_max();
+            customBoatHolder.draft_max.setText(draft_max);
+            customBoatHolder.draft_maxContainer.setVisibility(draft_max.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //draft_min
+            String draft_min = boatItem.getDraft_min();
+            customBoatHolder.draft_min.setText(draft_min);
+            customBoatHolder.draft_minContainer.setVisibility(draft_min.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //e
+            String e = boatItem.getE();
+            customBoatHolder.e.setText(e);
+            customBoatHolder.eContainer.setVisibility(e.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //ey
+            String ey = boatItem.getEy();
+            customBoatHolder.ey.setText(ey);
+            customBoatHolder.eyContainer.setVisibility(ey.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //first_built
+            String first_built = boatItem.getFirst_built();
+            customBoatHolder.first_built.setText(first_built);
+            customBoatHolder.first_builtContainer.setVisibility(first_built.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //fuel
+            String fuel = boatItem.getFuel();
+            customBoatHolder.fuel.setText(fuel);
+            customBoatHolder.fuelContainer.setVisibility(fuel.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //hp
+            String hp = boatItem.getHp();
+            customBoatHolder.hp.setText(hp);
+            customBoatHolder.hpContainer.setVisibility(hp.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //hull
+            String hull = boatItem.getHull();
+            customBoatHolder.hull.setText(hull);
+            customBoatHolder.hullContainer.setVisibility(hull.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //i
+            String _i = boatItem.getI();
+            customBoatHolder.i.setText(_i);
+            customBoatHolder.iContainer.setVisibility(_i.isEmpty() ? View.GONE : View.VISIBLE);
+
+
+            //isp
+            String isp = boatItem.getIsp();
+            customBoatHolder.isp.setText(isp);
+            customBoatHolder.ispContainer.setVisibility(isp.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //j
+            String j = boatItem.getJ();
+            customBoatHolder.j.setText(j);
+            customBoatHolder.jContainer.setVisibility(j.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //last_built
+            String last_built = boatItem.getLast_built();
+            customBoatHolder.last_built.setText(last_built);
+            customBoatHolder.last_builtContainer.setVisibility(last_built.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //loa
+            String loa = boatItem.getLoa();
+            customBoatHolder.loa.setText(loa);
+            customBoatHolder.loaContainer.setVisibility(loa.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //lwl
+            String lwl = boatItem.getLwl();
+            customBoatHolder.lwl.setText(lwl);
+            customBoatHolder.lwlContainer.setVisibility(lwl.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //make
+            String make = boatItem.getMake();
+            customBoatHolder.make.setText(make);
+            customBoatHolder.makeContainer.setVisibility(make.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //mast_height
+            String mast_height = boatItem.getMast_height();
+            customBoatHolder.mast_height.setText(mast_height);
+            customBoatHolder.mast_heightContainer.setVisibility(mast_height.isEmpty() ? View.GONE : View.VISIBLE);
+
+//model
+            String model = boatItem.getModel();
+            customBoatHolder.model.setText(model);
+            customBoatHolder.modelContainer.setVisibility(model.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //more
+            String more = boatItem.getMore();
+            customBoatHolder.more.setText(more);
+            customBoatHolder.moreContainer.setVisibility(more.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //num_built
+            String num_built = boatItem.getNum_built();
+            customBoatHolder.num_built.setText(num_built);
+            customBoatHolder.num_builtContainer.setVisibility(num_built.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //p
+            String p = boatItem.getP();
+            customBoatHolder.p.setText(p);
+            customBoatHolder.pContainer.setVisibility(p.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //py
+            String py = boatItem.getPy();
+            customBoatHolder.py.setText(py);
+            customBoatHolder.pyContainer.setVisibility(py.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //rig_type
+            String rig_type = boatItem.getRig_type();
+            customBoatHolder.rig_type.setText(rig_type);
+            customBoatHolder.rig_typeContainer.setVisibility(rig_type.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //sa_disp
+            String sa_disp = boatItem.getSa_disp();
+            customBoatHolder.sa_disp.setText(sa_disp);
+            customBoatHolder.sa_dispContainer.setVisibility(sa_disp.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //sa_fore
+            String sa_fore = boatItem.getSa_fore();
+            customBoatHolder.sa_fore.setText(sa_fore);
+            customBoatHolder.sa_foreContainer.setVisibility(sa_fore.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //sa_list
+            String sa_list = boatItem.getSa_list();
+            customBoatHolder.sa_list.setText(sa_list);
+            customBoatHolder.sa_listContainer.setVisibility(sa_list.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //spl
+            String spl = boatItem.getSpl();
+            customBoatHolder.spl.setText(spl);
+            customBoatHolder.splContainer.setVisibility(spl.isEmpty() ? View.GONE : View.VISIBLE);
+
+
+//total_calc
+            String total_calc = boatItem.getTotal_calc();
+            customBoatHolder.total_calc.setText(total_calc);
+            customBoatHolder.total_calcContainer.setVisibility(total_calc.isEmpty() ? View.GONE : View.VISIBLE);
+
+            //type
+            String type = boatItem.getType();
+            customBoatHolder.type.setText(type);
+            customBoatHolder.typeContainer.setVisibility(type.isEmpty() ? View.GONE : View.VISIBLE);
+
+//water
+            String water = boatItem.getWater();
+            customBoatHolder.water.setText(water);
+            customBoatHolder.waterContainer.setVisibility(water.isEmpty() ? View.GONE : View.VISIBLE);
+
+
+            customBoatHolder.designerText.setText(boatItem.getDesigner());
+            customBoatHolder.titleText.setText(boatItem.getTitle());
+            customBoatHolder.rigText.setText(boatItem.getRig_type());
+
+
+
+
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return (null != boatList ? boatList.size() : 0);
+    }
+
     /**
      * Created by mookie on 10/30/15.
      * for Nerd.Solutions
      */
-
     public static  class CustomBoatHolder extends RecyclerView.ViewHolder{
 
         protected ViewFlipper viewFlipper;
@@ -118,14 +427,12 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         protected TextView water;
         protected LinearLayout waterContainer;
         protected CardView frontCard;
-        protected CardView rearCard;
 
 
         protected View itemView;
         public CustomBoatHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
-            this.boatLength=(TextView)itemView.findViewById(R.id.loa);
             this.viewFlipper=(ViewFlipper)itemView.findViewById(R.id.viewflipper);
             this.boatYears=(TextView)itemView.findViewById(R.id.yearText);
             this.titleText=(TextView)itemView.findViewById(R.id.title);
@@ -133,8 +440,10 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
             this.rigText=(TextView)itemView.findViewById(R.id.rig_type);
             this.designerText=(TextView)itemView.findViewById(R.id.designer);
 
+
             this.frontCard=(CardView) itemView.findViewById(R.id.frontCard);
-            this.rearCard=(CardView) itemView.findViewById(R.id.rearCard);
+/*
+            this.boatLength=(TextView)itemView.findViewById(R.id.loa);
 
             this.bal_disp=(TextView)itemView.findViewById(R.id.bal_disp);
             this.bal_dispContainer=(LinearLayout)itemView.findViewById(R.id.bal_dispContainer);
@@ -295,386 +604,11 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
             this.beam=(TextView)itemView.findViewById(R.id.beam);
             this.beamContainer=(LinearLayout)itemView.findViewById(R.id.beamContainer);
 
-
+*/
 
 
 //            cardView.setPreventCornerOverlap(false);
         }
-    }
-
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    private static final String TAG = BoatArrayAdapter.class.getSimpleName();
-
-
-
-
-    private Context context;
-    @Override
-    public CustomBoatHolder onCreateViewHolder(ViewGroup viewGroup,int position){
-        Log.d(TAG,"onCreateViewHolder");
-
-
-        final Context c = viewGroup.getContext();
-        context=c;
-        View view = LayoutInflater.from(c).inflate(R.layout.boat_row_layout, null);
-
-
-        return new CustomBoatHolder(view);
-    }
-
-    private boolean mShowingBack;
-
-
-    private final Context mContext;
-    public BoatArrayAdapter(Context context,List<Boat> boatList){
-        this.boatList=boatList;
-        mContext=context;
-    }
-
-    private void setAnimation(View viewToAnimate, int position)
-    {
-        // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition)
-        {
-            Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
-    }
-    private int lastPosition = -1;
-
-
-    private float lastX;
-    @Override
-    public void onBindViewHolder(final CustomBoatHolder customBoatHolder, int i) {
-
-        Boat boatItem = boatList.get(i);
-
-
-        customBoatHolder.itemView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent touchEvent) {
-
-
-
-                if (customBoatHolder.viewFlipper.getDisplayedChild()==0){
-                    customBoatHolder.rearCard.setVisibility(View.VISIBLE);
-                    // Next screen comes in from left.
-                    customBoatHolder.viewFlipper.setInAnimation(context, R.anim.slide_in_from_right);
-                    // Current screen goes out from right.
-                    customBoatHolder.viewFlipper.setOutAnimation(context, R.anim.slide_out_to_left);
-
-                    // Display next screen.
-                    customBoatHolder.viewFlipper.showNext();
-                }else{
-                    customBoatHolder.rearCard.setVisibility(View.GONE);
-
-                    // Next screen comes in from right.
-                    customBoatHolder.viewFlipper.setInAnimation(context, R.anim.slide_in_from_left);
-                    // Current screen goes out from left.
-                    customBoatHolder.viewFlipper.setOutAnimation(context, R.anim.slide_out_to_right);
-
-                    // Display previous screen.
-                    customBoatHolder.viewFlipper.showPrevious();
-
-                }
-                switch (touchEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        lastX = touchEvent.getX();
-                        Log.i(TAG, "Action Down");
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        Log.i(TAG, "MOVE");
-                        break;
-                    case MotionEvent.ACTION_UP:
-
-
-                        float currentX = touchEvent.getX();
-                        // Handling left to right screen swap.
-                        if (lastX < currentX) {
-                            Log.i(TAG, "onTouch");
-                            if (customBoatHolder.viewFlipper.getDisplayedChild()==0)
-                                break;
-
-                            // Next screen comes in from left.
-                            customBoatHolder.viewFlipper.setInAnimation(context, R.anim.slide_in_from_left);
-                            // Current screen goes out from right.
-                            customBoatHolder.viewFlipper.setOutAnimation(context, R.anim.slide_out_to_right);
-
-                            // Display next screen.
-                            customBoatHolder.viewFlipper.showNext();
-
-                        }
-                        Log.i(TAG, "Action UP");
-                        Log.i(TAG, "onTouch");
-
-                        if (currentX < lastX) {
-
-                            Log.d(TAG, "Backside");
-
-                            // If there is a child (to the left), kust break.
-                            if (customBoatHolder.viewFlipper.getDisplayedChild() == 1)
-                                break;
-
-                            // Next screen comes in from right.
-                            customBoatHolder.viewFlipper.setInAnimation(context, R.anim.slide_in_from_right);
-                            // Current screen goes out from left.
-                            customBoatHolder.viewFlipper.setOutAnimation(context, R.anim.slide_out_to_left);
-
-                            // Display previous screen.
-                            customBoatHolder.viewFlipper.showPrevious();
-
-                        }
-                        break;
-
-                    default:
-                        Log.i(TAG, "Action");
-                        break;
-
-
-                }
-                return false;
-            }
-        });
-
-        setAnimation(customBoatHolder.itemView, i);
-
-
-        String years="Year(s)";
-
-        // Get boat Years
-        String boatYears=boatItem.getFirst_built();
-
-        if (!boatYears.isEmpty())
-            years+=boatYears;
-
-        String lastYear=boatItem.getLast_built();
-        if (lastYear.length()>0)
-            years+=" / "+lastYear;
-        customBoatHolder.boatYears.setText(years);
-
-
-
-
-        //bal_disp
-        String bal_disp = boatItem.getBal_disp();
-        customBoatHolder.bal_disp.setText(bal_disp);
-        customBoatHolder.bal_dispContainer.setVisibility(bal_disp.isEmpty()?View.GONE:View.VISIBLE);
-
-        //bal_type
-        String bal_type = boatItem.getBal_type();
-        customBoatHolder.bal_type.setText(bal_type);
-        customBoatHolder.bal_typeContainer.setVisibility(bal_type.isEmpty()?View.GONE:View.VISIBLE);
-
-        //ballast
-        String ballast = boatItem.getBallast();
-        customBoatHolder.ballast.setText(ballast);
-        customBoatHolder.ballastContainer.setVisibility(ballast.isEmpty()?View.GONE:View.VISIBLE);
-
-        //beam
-        String beam = boatItem.getBeam();
-        customBoatHolder.beam.setText(beam);
-        customBoatHolder.beamContainer.setVisibility(beam.isEmpty()?View.GONE:View.VISIBLE);
-
-        //builder
-        String builder = boatItem.getBuilder();
-        customBoatHolder.builder.setText(builder);
-        customBoatHolder.builderContainer.setVisibility(builder.isEmpty()?View.GONE:View.VISIBLE);
-
-        //construct
-        String construct = boatItem.getConstruct();
-        customBoatHolder.construct.setText(construct);
-        customBoatHolder.constructContainer.setVisibility(construct.isEmpty()?View.GONE:View.VISIBLE);
-
-        //designer
-        String designer = boatItem.getDesigner();
-        customBoatHolder.designer.setText(designer);
-        customBoatHolder.designerContainer.setVisibility(designer.isEmpty()?View.GONE:View.VISIBLE);
-
-        //disp
-        String disp = boatItem.getDisp();
-        customBoatHolder.disp.setText(disp);
-        customBoatHolder.dispContainer.setVisibility(disp.isEmpty()?View.GONE:View.VISIBLE);
-
-        //draft_max
-        String draft_max = boatItem.getDraft_max();
-        customBoatHolder.draft_max.setText(draft_max);
-        customBoatHolder.draft_maxContainer.setVisibility(draft_max.isEmpty()?View.GONE:View.VISIBLE);
-
-        //draft_min
-        String draft_min = boatItem.getDraft_min();
-        customBoatHolder.draft_min.setText(draft_min);
-        customBoatHolder.draft_minContainer.setVisibility(draft_min.isEmpty()?View.GONE:View.VISIBLE);
-
-        //e
-        String e = boatItem.getE();
-        customBoatHolder.e.setText(e);
-        customBoatHolder.eContainer.setVisibility(e.isEmpty()?View.GONE:View.VISIBLE);
-
-        //ey
-        String ey = boatItem.getEy();
-        customBoatHolder.ey.setText(ey);
-        customBoatHolder.eyContainer.setVisibility(ey.isEmpty()?View.GONE:View.VISIBLE);
-
-        //first_built
-        String first_built = boatItem.getFirst_built();
-        customBoatHolder.first_built.setText(first_built);
-        customBoatHolder.first_builtContainer.setVisibility(first_built.isEmpty()?View.GONE:View.VISIBLE);
-
-        //fuel
-        String fuel = boatItem.getFuel();
-        customBoatHolder.fuel.setText(fuel);
-        customBoatHolder.fuelContainer.setVisibility(fuel.isEmpty()?View.GONE:View.VISIBLE);
-
-        //hp
-        String hp = boatItem.getHp();
-        customBoatHolder.hp.setText(hp);
-        customBoatHolder.hpContainer.setVisibility(hp.isEmpty()?View.GONE:View.VISIBLE);
-
-        //hull
-        String hull = boatItem.getHull();
-        customBoatHolder.hull.setText(hull);
-        customBoatHolder.hullContainer.setVisibility(hull.isEmpty()?View.GONE:View.VISIBLE);
-
-        //i
-        String _i = boatItem.getI();
-        customBoatHolder.i.setText(_i);
-        customBoatHolder.iContainer.setVisibility(_i.isEmpty()?View.GONE:View.VISIBLE);
-
-
-
-        //isp
-        String isp = boatItem.getIsp();
-        customBoatHolder.isp.setText(isp);
-        customBoatHolder.ispContainer.setVisibility(isp.isEmpty()?View.GONE:View.VISIBLE);
-
-        //j
-        String j = boatItem.getJ();
-        customBoatHolder.j.setText(j);
-        customBoatHolder.jContainer.setVisibility(j.isEmpty()?View.GONE:View.VISIBLE);
-
-        //last_built
-        String last_built = boatItem.getLast_built();
-        customBoatHolder.last_built.setText(last_built);
-        customBoatHolder.last_builtContainer.setVisibility(last_built.isEmpty()?View.GONE:View.VISIBLE);
-
-        //loa
-        String loa = boatItem.getLoa();
-        customBoatHolder.loa.setText(loa);
-        customBoatHolder.loaContainer.setVisibility(loa.isEmpty()?View.GONE:View.VISIBLE);
-
-        //lwl
-        String lwl = boatItem.getLwl();
-        customBoatHolder.lwl.setText(lwl);
-        customBoatHolder.lwlContainer.setVisibility(lwl.isEmpty()?View.GONE:View.VISIBLE);
-
-        //make
-        String make = boatItem.getMake();
-        customBoatHolder.make.setText(make);
-        customBoatHolder.makeContainer.setVisibility(make.isEmpty()?View.GONE:View.VISIBLE);
-
-        //mast_height
-        String mast_height = boatItem.getMast_height();
-        customBoatHolder.mast_height.setText(mast_height);
-        customBoatHolder.mast_heightContainer.setVisibility(mast_height.isEmpty()?View.GONE:View.VISIBLE);
-
-//model
-        String model = boatItem.getModel();
-        customBoatHolder.model.setText(model);
-        customBoatHolder.modelContainer.setVisibility(model.isEmpty()?View.GONE:View.VISIBLE);
-
-        //more
-        String more = boatItem.getMore();
-        customBoatHolder.more.setText(more);
-        customBoatHolder.moreContainer.setVisibility(more.isEmpty()?View.GONE:View.VISIBLE);
-
-        //num_built
-        String num_built = boatItem.getNum_built();
-        customBoatHolder.num_built.setText(num_built);
-        customBoatHolder.num_builtContainer.setVisibility(num_built.isEmpty()?View.GONE:View.VISIBLE);
-
-        //p
-        String p = boatItem.getP();
-        customBoatHolder.p.setText(p);
-        customBoatHolder.pContainer.setVisibility(p.isEmpty()?View.GONE:View.VISIBLE);
-
-        //py
-        String py = boatItem.getPy();
-        customBoatHolder.py.setText(py);
-        customBoatHolder.pyContainer.setVisibility(py.isEmpty()?View.GONE:View.VISIBLE);
-
-        //rig_type
-        String rig_type = boatItem.getRig_type();
-        customBoatHolder.rig_type.setText(rig_type);
-        customBoatHolder.rig_typeContainer.setVisibility(rig_type.isEmpty()?View.GONE:View.VISIBLE);
-
-        //sa_disp
-        String sa_disp = boatItem.getSa_disp();
-        customBoatHolder.sa_disp.setText(sa_disp);
-        customBoatHolder.sa_dispContainer.setVisibility(sa_disp.isEmpty()?View.GONE:View.VISIBLE);
-
-        //sa_fore
-        String sa_fore = boatItem.getSa_fore();
-        customBoatHolder.sa_fore.setText(sa_fore);
-        customBoatHolder.sa_foreContainer.setVisibility(sa_fore.isEmpty()?View.GONE:View.VISIBLE);
-
-        //sa_list
-        String sa_list = boatItem.getSa_list();
-        customBoatHolder.sa_list.setText(sa_list);
-        customBoatHolder.sa_listContainer.setVisibility(sa_list.isEmpty()?View.GONE:View.VISIBLE);
-
-        //spl
-        String spl = boatItem.getSpl();
-        customBoatHolder.spl.setText(spl);
-        customBoatHolder.splContainer.setVisibility(spl.isEmpty()?View.GONE:View.VISIBLE);
-
-//title
-        String title = boatItem.getTitle();
-        customBoatHolder.title.setText(title);
-    //    customBoatHolder.titleContainer.setVisibility(title.isEmpty()?View.GONE:View.VISIBLE);
-
-//total_calc
-        String total_calc = boatItem.getTotal_calc();
-        customBoatHolder.total_calc.setText(total_calc);
-        customBoatHolder.total_calcContainer.setVisibility(total_calc.isEmpty()?View.GONE:View.VISIBLE);
-
-        //type
-        String type = boatItem.getType();
-        customBoatHolder.type.setText(type);
-        customBoatHolder.typeContainer.setVisibility(type.isEmpty()?View.GONE:View.VISIBLE);
-
-//water
-        String water = boatItem.getWater();
-        customBoatHolder.water.setText(water);
-        customBoatHolder.waterContainer.setVisibility(water.isEmpty()?View.GONE:View.VISIBLE);
-
-
-        customBoatHolder.designerText.setText(boatItem.getDesigner());
-        customBoatHolder.titleText.setText(boatItem.getTitle());
-        customBoatHolder.rigText.setText(boatItem.getRig_type());
-
-
-
-        String img = boatItem.getImage(0);
-
-        if (img!=null&&!img.isEmpty()){
-            String urlString = "http://sailsite.meteor.com/"+img+".jpg";
-            Picasso.with(mContext).load(urlString)
-                    .into(customBoatHolder.boatImage);
-        }
-
-
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return (null != boatList ? boatList.size() : 0);
     }
 
 

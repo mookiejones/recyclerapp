@@ -1,27 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rearCard"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants"
-    app:cardBackgroundColor="@color/card"
-    app:cardCornerRadius="@dimen/stream_card_corner_radius"
-    app:cardElevation="@dimen/card_elevation"
-
-    app:cardUseCompatPadding="true">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-        <!-- Hull -->
         <LinearLayout
             android:id="@+id/hullContainer"
             android:layout_width="wrap_content"
@@ -41,7 +29,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/hull_title" />
         </LinearLayout>
-        <!-- Hull -->
         <LinearLayout
             android:id="@+id/rig_typeContainer"
             android:layout_width="wrap_content"
@@ -110,7 +97,6 @@
                     android:text="@string/lwl_title" />
             </LinearLayout>
 
-            <!-- Beam -->
             <LinearLayout
                 android:id="@+id/beamContainer"
                 android:layout_width="wrap_content"
@@ -147,7 +133,6 @@
                 android:text="Ballast"
                 android:textAlignment="center"
                 android:textStyle="bold" />
-            <!-- Ballast Displacment -->
             <LinearLayout
                 android:id="@+id/bal_dispContainer"
                 android:layout_width="wrap_content"
@@ -168,7 +153,6 @@
                     android:text="@string/bal_disp_title" />
             </LinearLayout>
 
-            <!-- Ballast Type -->
             <LinearLayout
                 android:id="@+id/bal_typeContainer"
                 android:layout_width="wrap_content"
@@ -189,7 +173,6 @@
                     android:text="@string/bal_type_title" />
             </LinearLayout>
 
-            <!-- Ballast Weight -->
             <LinearLayout
                 android:id="@+id/ballastContainer"
                 android:layout_width="wrap_content"
@@ -213,7 +196,6 @@
 
 
 
-        <!-- Builder -->
         <LinearLayout
             android:id="@+id/builderContainer"
             android:layout_width="wrap_content"
@@ -234,7 +216,6 @@
                 android:text="@string/builder_title" />
         </LinearLayout>
 
-        <!-- Construct -->
         <LinearLayout
             android:id="@+id/constructContainer"
             android:layout_width="wrap_content"
@@ -255,7 +236,6 @@
                 android:text="@string/construct_title" />
         </LinearLayout>
 
-        <!-- Displacement -->
         <LinearLayout
             android:id="@+id/dispContainer"
             android:layout_width="wrap_content"
@@ -276,7 +256,6 @@
                 android:text="@string/disp_title" />
         </LinearLayout>
 
-        <!-- Draft max -->
         <LinearLayout
             android:id="@+id/draft_maxContainer"
             android:layout_width="wrap_content"
@@ -297,7 +276,6 @@
                 android:text="@string/draft_max_title" />
         </LinearLayout>
 
-        <!-- Draft Min -->
         <LinearLayout
             android:id="@+id/draft_minContainer"
             android:layout_width="wrap_content"
@@ -318,7 +296,6 @@
                 android:text="@string/draft_min_title" />
         </LinearLayout>
 
-        <!-- E -->
         <LinearLayout
             android:id="@+id/eContainer"
             android:layout_width="wrap_content"
@@ -339,7 +316,6 @@
                 android:text="@string/e_title" />
         </LinearLayout>
 
-        <!-- EY -->
         <LinearLayout
             android:id="@+id/eyContainer"
             android:layout_width="wrap_content"
@@ -360,7 +336,6 @@
                 android:text="@string/ey_title" />
         </LinearLayout>
 
-        <!-- First Built -->
         <LinearLayout
             android:id="@+id/first_builtContainer"
             android:layout_width="wrap_content"
@@ -818,7 +793,7 @@
 
 
 
+
         </LinearLayout>
     </LinearLayout>
 
-</android.support.v7.widget.CardView>

@@ -10,11 +10,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,6 +30,8 @@ import java.util.List;
 public class BoatFragment extends Fragment
     implements ITextQueryListener
 {
+
+    private CardView mSelectedCard;
     private RecyclerView mRecyclerView;
     private static final String TAG = LogUtils.getLogTag(BoatFragment.class);
 
@@ -47,6 +51,7 @@ public class BoatFragment extends Fragment
 
         BoatArrayAdapter mAdapter = new BoatArrayAdapter(getContext(), new ArrayList<Boat>());
 
+
         Log.d(TAG, "onCreateView");
 
         View view = inflater.inflate(R.layout.boat_fragment,null);
@@ -55,8 +60,9 @@ public class BoatFragment extends Fragment
 
         // use a linear layout manager
 
-//        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);

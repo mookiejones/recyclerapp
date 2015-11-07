@@ -1,103 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/frontCard"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/card"
-    app:cardCornerRadius="@dimen/stream_card_corner_radius"
-    app:cardElevation="@dimen/card_elevation"
-    app:cardUseCompatPadding="true"
-
-    android:descendantFocusability="blocksDescendants"
-    >
-    <RelativeLayout
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <ImageView
 
+        <ImageView
             android:id="@+id/boatThumbnail"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:layout_height="match_parent"
+            android:cropToPadding="true" />
 
-            android:cropToPadding="true"
 
-            android:contentDescription="@string/boat_image_description"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true" />
-
-        <LinearLayout
-            android:id="@+id/titleContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/boatThumbnail">
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/title"
-                android:textSize="14sp"
-                android:paddingStart="15dip"
-                android:textColor="?android:textColorSecondary"
-               />
-        </LinearLayout>
-
+    <LinearLayout
+        android:layout_marginTop="24dp"
+        android:id="@+id/rig_typeContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentStart="true"
+        >
 
         <TextView
+            android:textSize="24sp"
+            android:id="@+id/rig_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/LabelStyle"
+            android:text="@string/rig_type"
+            />
+    </LinearLayout>
+
+
+    <TextView
             android:id="@+id/yearText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="year"
-            android:paddingStart="15dip"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+            />
 
-            android:layout_below="@+id/titleContainer"
-            android:layout_alignStart="@+id/titleContainer" />
-
-        <LinearLayout
-            android:id="@+id/rig_typeContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/yearText"
-            android:layout_alignParentStart="true"
-            >
-
-            <TextView
-                android:id="@+id/rig_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="15dip"
-                style="@style/LabelStyle"
-                android:text="@string/rig_type"
-               />
-        </LinearLayout>
         <LinearLayout
             android:id="@+id/designerContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@+id/rig_typeContainer"
-            android:layout_alignStart="@+id/rig_typeContainer"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             >
 
             <TextView
                 android:id="@+id/designer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/designer"
-                android:paddingStart="15dip"
-
-
-
-                />
+                android:text="@string/designer"/>
         </LinearLayout>
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
-</android.support.v7.widget.CardView>
