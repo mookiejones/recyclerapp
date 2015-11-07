@@ -34,8 +34,8 @@ public class JsonParser {
         List<Boat> boats = new ArrayList<>();
 
         try {
-
-            URL url = new URL("http://sailsite.meteor.com/api/"+args);
+            String url_string = Global.getApiPath(args);
+            URL url = new URL(url_string);
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             json= readStream(in);

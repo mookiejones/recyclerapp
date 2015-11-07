@@ -162,6 +162,7 @@ public class MapFragment extends Fragment
 
     private static View view;
 
+
     private void setupMapIfNeeded() {
         if (mMap != null) {
             return;
@@ -171,8 +172,14 @@ public class MapFragment extends Fragment
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
                 updateMarkers();
+                WebAISTask t = new WebAISTask();
+                t.doInBackground("");
+
+                //TODO get position
+
             }
         });
+
 
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -464,6 +471,10 @@ public class MapFragment extends Fragment
             locationManager.requestLocationUpdates(provider, time, distance, this);
         }
     }
+
+
+
+
     private String provider;
     private void createLocationListenerNotification() {
         Resources resources = getResources();
