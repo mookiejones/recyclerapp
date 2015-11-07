@@ -17,6 +17,13 @@ import android.view.ViewGroup;
 public class CameraFragment extends Fragment {
     private static final String TAG = CameraFragment.class.getSimpleName();
     private static CameraFragment instance;
+    private View view;
+
+    public static CameraFragment getInstance() {
+        if (instance == null)
+            instance = new CameraFragment();
+        return instance;
+    }
 
     /**
      * Called to have the fragment instantiate its user interface view.
@@ -39,24 +46,17 @@ public class CameraFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (view !=null){
-            ViewGroup parent = (ViewGroup)view.getParent();
-            if (parent!=null)
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
                 parent.removeView(view);
         }
         try {
             view = inflater.inflate(R.layout.camera_activity_content, null);
-        }catch(InflateException e){
+        } catch (InflateException e) {
             Log.e(TAG, e.getMessage());
         }
         return view;
 
     }
-
-    public static CameraFragment getInstance(){
-        if (instance==null)
-            instance = new CameraFragment();
-        return instance;
-    }
-    private View view;
 }

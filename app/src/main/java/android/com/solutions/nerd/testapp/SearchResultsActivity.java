@@ -1,6 +1,5 @@
 package android.com.solutions.nerd.testapp;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +29,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             //use the query to search your data somehow
-            Snackbar.make(getWindow().getDecorView(),query,Snackbar.LENGTH_LONG).show();
+            Snackbar.make(getWindow().getDecorView(), query, Snackbar.LENGTH_LONG).show();
         }
     }
 }

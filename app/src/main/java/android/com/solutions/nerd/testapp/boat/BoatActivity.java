@@ -12,7 +12,7 @@ import android.view.View;
  * Created by mookie on 11/3/15.
  * for Nerd.Solutions
  */
-public class BoatActivity extends BaseActivity{
+public class BoatActivity extends BaseActivity {
     private static final String TAG = BaseActivity.class.getSimpleName();
 
     @Override
@@ -21,7 +21,7 @@ public class BoatActivity extends BaseActivity{
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         boolean shouldBeFloatingWindow = shouldBeFloatingWindow();
 
         if (shouldBeFloatingWindow) {
@@ -34,7 +34,7 @@ public class BoatActivity extends BaseActivity{
 
         final Toolbar toolbar = getActionBarToolbar();
 //        toolbar.setNavigationIcon(shouldBeFloatingWindow
- //               ? R.drawable.ic_ab_close : R.drawable.ic_up);
+        //               ? R.drawable.ic_ab_close : R.drawable.ic_up);
         toolbar.setNavigationContentDescription(R.string.close_and_go_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

@@ -16,7 +16,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,21 +27,20 @@ import java.util.List;
  * for Nerd.Solutions
  */
 public class BoatFragment extends Fragment
-    implements ITextQueryListener
-{
+        implements ITextQueryListener {
 
+    private static final String TAG = LogUtils.getLogTag(BoatFragment.class);
+    private static BoatFragment instance;
+    BoatParser mParser;
+    List<Boat> boatList;
     private CardView mSelectedCard;
     private RecyclerView mRecyclerView;
-    private static final String TAG = LogUtils.getLogTag(BoatFragment.class);
 
-    private static BoatFragment instance;
-    public static BoatFragment getInstance(){
-        if (instance==null)
+    public static BoatFragment getInstance() {
+        if (instance == null)
             instance = new BoatFragment();
         return instance;
     }
-
-
 
     @Nullable
     @Override
@@ -54,13 +52,13 @@ public class BoatFragment extends Fragment
 
         Log.d(TAG, "onCreateView");
 
-        View view = inflater.inflate(R.layout.boat_fragment,null);
+        View view = inflater.inflate(R.layout.boat_fragment, null);
 
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.list);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
 
         // use a linear layout manager
 
-        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -72,14 +70,12 @@ public class BoatFragment extends Fragment
         return view;
     }
 
-
-    BoatParser mParser;
     @Override
     public void OnTextChanged(String queryText) {
         Log.d(TAG, queryText);
-        if(mParser!=null)
+        if (mParser != null)
             mParser.cancel(true);
-        mParser= new BoatParser();
+        mParser = new BoatParser();
         mParser.execute(queryText);
     }
 
@@ -93,23 +89,19 @@ public class BoatFragment extends Fragment
         super.onAttach(context);
 
         MainActivity a;
-        if(context instanceof MainActivity){
-            a=(MainActivity)context;
+        if (context instanceof MainActivity) {
+            a = (MainActivity) context;
             a.registerQueryListener(this);
         }
     }
 
-    List<Boat> boatList;
-
-
-
-
-    private class BoatParser extends AsyncTask<String ,String,List<Boat>>{
+    private class BoatParser extends AsyncTask<String, String, List<Boat>> {
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             super.onPreExecute();
         }
+
         @Override
         protected List<Boat> doInBackground(String... args) {
 
@@ -119,16 +111,13 @@ public class BoatFragment extends Fragment
 
         @Override
         protected void onPostExecute(List<Boat> boats) {
-            boatList=boats;
-            BoatArrayAdapter adapter=new BoatArrayAdapter(getContext(),boatList);
+            boatList = boats;
+            BoatArrayAdapter adapter = new BoatArrayAdapter(getContext(), boatList);
             mRecyclerView.setAdapter(adapter);
 
 
-
-
-
             Log.d(TAG, "onPostExecute");
-    }
+        }
     }
 
 

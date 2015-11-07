@@ -4,7 +4,6 @@ import android.com.solutions.nerd.testapp.R;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,17 +25,15 @@ import java.util.List;
  */
 public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.CustomBoatHolder> {
     private static final String TAG = BoatArrayAdapter.class.getSimpleName();
+    protected static CustomBoatHolder mSelectedBoat;
     private final Context mContext;
     private List<Boat> boatList;
     private int lastPosition = -1;
     private float lastX;
 
-
-
-
-    public BoatArrayAdapter(Context context,List<Boat> boatList){
-        this.boatList=boatList;
-        mContext=context;
+    public BoatArrayAdapter(Context context, List<Boat> boatList) {
+        this.boatList = boatList;
+        mContext = context;
     }
 
     @Override
@@ -45,24 +42,19 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
     }
 
     @Override
-    public CustomBoatHolder onCreateViewHolder(ViewGroup viewGroup,int position){
+    public CustomBoatHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.boat_row_layout, null);
         return new CustomBoatHolder(view);
     }
 
-    private void setAnimation(View viewToAnimate, int position)
-    {
+    private void setAnimation(View viewToAnimate, int position) {
         // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition)
-        {
+        if (position > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
         }
     }
-
-
-    protected static CustomBoatHolder mSelectedBoat;
 
     @Override
     public void onBindViewHolder(final CustomBoatHolder customBoatHolder, int i) {
@@ -74,7 +66,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
             @Override
             public boolean onTouch(View v, MotionEvent touchEvent) {
 
-                if (customBoatHolder.viewFlipper.getDisplayedChild()==0){
+                if (customBoatHolder.viewFlipper.getDisplayedChild() == 0) {
                     // Next screen comes in from left.
                     customBoatHolder.viewFlipper.setInAnimation(mContext, R.anim.slide_in_from_right);
                     // Current screen goes out from right.
@@ -82,7 +74,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
 
                     // Display next screen.
                     customBoatHolder.viewFlipper.showNext();
-                }else{
+                } else {
 
                     // Next screen comes in from right.
                     customBoatHolder.viewFlipper.setInAnimation(mContext, R.anim.slide_in_from_left);
@@ -93,27 +85,25 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
                     customBoatHolder.viewFlipper.showPrevious();
 
                 }
-                 return false;
+                return false;
             }
         });
 
         setAnimation(customBoatHolder.itemView, i);
 
 
-        String years="Year(s)";
+        String years = "Year(s)";
 
         // Get boat Years
-        String boatYears=boatItem.getFirst_built();
+        String boatYears = boatItem.getFirst_built();
 
         if (!boatYears.isEmpty())
-            years+=boatYears;
+            years += boatYears;
 
-        String lastYear=boatItem.getLast_built();
-        if (lastYear.length()>0)
-            years+=" / "+lastYear;
+        String lastYear = boatItem.getLast_built();
+        if (lastYear.length() > 0)
+            years += " / " + lastYear;
         customBoatHolder.boatYears.setText(years);
-
-
 
 
         String img = boatItem.getImage(0);
@@ -130,8 +120,8 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         String title = boatItem.getTitle();
         customBoatHolder.titleText.setText(title);
 
-        boolean pass=false;
-        if(pass) {
+        boolean pass = false;
+        if (pass) {
 
             //bal_disp
             String bal_disp = boatItem.getBal_disp();
@@ -326,8 +316,6 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
             customBoatHolder.rigText.setText(boatItem.getRig_type());
 
 
-
-
         }
     }
 
@@ -340,7 +328,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
      * Created by mookie on 10/30/15.
      * for Nerd.Solutions
      */
-    public static  class CustomBoatHolder extends RecyclerView.ViewHolder{
+    public static class CustomBoatHolder extends RecyclerView.ViewHolder {
 
         protected ViewFlipper viewFlipper;
         protected ImageView boatImage;
@@ -430,18 +418,19 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
 
 
         protected View itemView;
+
         public CustomBoatHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
-            this.viewFlipper=(ViewFlipper)itemView.findViewById(R.id.viewflipper);
-            this.boatYears=(TextView)itemView.findViewById(R.id.yearText);
-            this.titleText=(TextView)itemView.findViewById(R.id.title);
-            this.boatImage=(ImageView)itemView.findViewById(R.id.boatThumbnail);
-            this.rigText=(TextView)itemView.findViewById(R.id.rig_type);
-            this.designerText=(TextView)itemView.findViewById(R.id.designer);
+            this.viewFlipper = (ViewFlipper) itemView.findViewById(R.id.viewflipper);
+            this.boatYears = (TextView) itemView.findViewById(R.id.yearText);
+            this.titleText = (TextView) itemView.findViewById(R.id.title);
+            this.boatImage = (ImageView) itemView.findViewById(R.id.boatThumbnail);
+            this.rigText = (TextView) itemView.findViewById(R.id.rig_type);
+            this.designerText = (TextView) itemView.findViewById(R.id.designer);
 
 
-            this.frontCard=(CardView) itemView.findViewById(R.id.frontCard);
+            this.frontCard = (CardView) itemView.findViewById(R.id.frontCard);
 /*
             this.boatLength=(TextView)itemView.findViewById(R.id.loa);
 
@@ -610,7 +599,6 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
 //            cardView.setPreventCornerOverlap(false);
         }
     }
-
 
 
 }

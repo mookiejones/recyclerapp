@@ -2,7 +2,6 @@ package android.com.solutions.nerd.testapp.main;
 
 import android.com.solutions.nerd.testapp.R;
 import android.com.solutions.nerd.testapp.boat.BoatFragment;
-
 import android.com.solutions.nerd.testapp.search.SearchActivity;
 import android.com.solutions.nerd.testapp.ui.BaseActivity;
 import android.content.Intent;
@@ -27,7 +26,7 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle( this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -45,8 +44,8 @@ public class MainActivity extends BaseActivity {
 
 
     @Override
-    public boolean onSearchRequested(){
-        Log.i(TAG,"onSearchRequested" );
+    public boolean onSearchRequested() {
+        Log.i(TAG, "onSearchRequested");
         startActivity(new Intent(this, SearchActivity.class));
         return true;
     }

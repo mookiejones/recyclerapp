@@ -21,10 +21,13 @@ import java.util.Calendar;
  * for Nerd.Solutions
  */
 public class HomeFragment extends Fragment {
+    private static final String TAG = HomeFragment.class.getSimpleName();
     private static HomeFragment instance;
-    public static HomeFragment getInstance(){
-        if (instance==null)
-            instance=new HomeFragment();
+    private View view;
+
+    public static HomeFragment getInstance() {
+        if (instance == null)
+            instance = new HomeFragment();
         return instance;
     }
 
@@ -49,43 +52,40 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (view !=null){
-            ViewGroup parent = (ViewGroup)view.getParent();
-            if (parent!=null)
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
                 parent.removeView(view);
         }
         try {
             view = inflater.inflate(R.layout.fragment_home, null);
-            final TextView text=(TextView)view.findViewById(R.id.hometext);
-            final EditText searchText=(EditText)view.findViewById(R.id.textSearch);
+            final TextView text = (TextView) view.findViewById(R.id.hometext);
+            final EditText searchText = (EditText) view.findViewById(R.id.textSearch);
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-            System.out.println( sdf.format(cal.getTime()) );
+            System.out.println(sdf.format(cal.getTime()));
             text.setText(sdf.format(cal.getTime()));
 
 
-            FloatingActionButton searchButton = (FloatingActionButton)view.findViewById(R.id.search);
+            FloatingActionButton searchButton = (FloatingActionButton) view.findViewById(R.id.search);
             searchButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String search=((EditText) view.findViewById(R.id.textSearch)).getText().toString();
+                    String search = ((EditText) view.findViewById(R.id.textSearch)).getText().toString();
                     Search(search);
                 }
             });
 
-        }catch(InflateException e){
+        } catch (InflateException e) {
             Log.e(TAG, e.getMessage());
         }
         return view;
 
     }
-    private void Search(String text){
-        Snackbar.make(view,"Searching for "+ text,Snackbar.LENGTH_LONG)
+
+    private void Search(String text) {
+        Snackbar.make(view, "Searching for " + text, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
-
-
-    private View view;
-    private static final String TAG=HomeFragment.class.getSimpleName();
 
 }

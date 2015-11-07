@@ -17,11 +17,14 @@ import android.view.ViewGroup;
 public class MainFragment extends Fragment {
     private static final String TAG = MainFragment.class.getSimpleName();
     private static MainFragment mInstance;
-    public static MainFragment getInstance(){
-        if (mInstance==null)
-            mInstance= new MainFragment();
+    private View view;
+
+    public static MainFragment getInstance() {
+        if (mInstance == null)
+            mInstance = new MainFragment();
         return mInstance;
     }
+
     /**
      * Called to have the fragment instantiate its user interface view.
      * This is optional, and non-graphical fragments can return null (which
@@ -43,18 +46,17 @@ public class MainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (view !=null){
-            ViewGroup parent = (ViewGroup)view.getParent();
-            if (parent!=null)
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
                 parent.removeView(view);
         }
         try {
             view = inflater.inflate(R.layout.content_main, null);
-        }catch(InflateException e){
+        } catch (InflateException e) {
             Log.e(TAG, e.getMessage());
         }
         return view;
 
     }
-    private View view;
 }

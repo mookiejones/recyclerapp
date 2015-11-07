@@ -1,16 +1,14 @@
 package android.com.solutions.nerd.testapp.ui;
 
 import android.app.SearchManager;
-import android.com.solutions.nerd.testapp.boat.BoatActivity;
-import android.com.solutions.nerd.testapp.boat.BoatFragment;
-import android.com.solutions.nerd.testapp.camera.CameraFragment;
 import android.com.solutions.nerd.testapp.HomeFragment;
 import android.com.solutions.nerd.testapp.ITextQueryListener;
+import android.com.solutions.nerd.testapp.R;
+import android.com.solutions.nerd.testapp.boat.BoatFragment;
+import android.com.solutions.nerd.testapp.camera.CameraFragment;
 import android.com.solutions.nerd.testapp.main.MainFragment;
 import android.com.solutions.nerd.testapp.map.MapFragment;
-import android.com.solutions.nerd.testapp.R;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -37,12 +35,12 @@ import java.util.List;
  */
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG=BaseActivity.class.getSimpleName();
+    private static final String TAG = BaseActivity.class.getSimpleName();
     private ITextQueryListener mTextQueryListener;
     private Toolbar mActionBarToolbar;
 
-    public void registerQueryListener(ITextQueryListener listener){
-        mTextQueryListener=listener;
+    public void registerQueryListener(ITextQueryListener listener) {
+        mTextQueryListener = listener;
     }
 
     @Override
@@ -54,7 +52,7 @@ public class BaseActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle( this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -105,7 +103,7 @@ public class BaseActivity extends AppCompatActivity
             public boolean onQueryTextChange(String newText) {
                 Log.d(TAG, newText);
 
-                if (mTextQueryListener!=null)
+                if (mTextQueryListener != null)
                     mTextQueryListener.OnTextChanged(newText);
 
                 return false;
@@ -148,19 +146,19 @@ public class BaseActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        Fragment fragment=null;
-        mTextQueryListener=null;
+        Fragment fragment = null;
+        mTextQueryListener = null;
         Bundle args = new Bundle();
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if (id==R.id.nav_home){
+        if (id == R.id.nav_home) {
             fragment = HomeFragment.getInstance();
-        }else if (id==R.id.nav_boat){
+        } else if (id == R.id.nav_boat) {
 
             fragment = BoatFragment.getInstance();
-        }else  if (id == R.id.nav_camera) {
-            fragment= CameraFragment.getInstance();
+        } else if (id == R.id.nav_camera) {
+            fragment = CameraFragment.getInstance();
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
             fragment = MainFragment.getInstance();
@@ -172,24 +170,23 @@ public class BaseActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
-        } else if (id==R.id.maps){
+        } else if (id == R.id.maps) {
 //            setContentView(R.layout.activity_maps);
 
             fragment = MapFragment.getInstance();
 
 
-
         }
-        List<Fragment> fragments=fragmentManager.getFragments();
-        if (fragments!=null&& fragments.size()>0){
-            for (Fragment f :fragments) {
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if (fragments != null && fragments.size() > 0) {
+            for (Fragment f : fragments) {
                 fragmentManager.beginTransaction().remove(f).commit();
             }
 
-            Log.d(TAG,"t" );
+            Log.d(TAG, "t");
         }
 
-        if (fragment!=null){
+        if (fragment != null) {
 
 
             fragmentManager.beginTransaction()
@@ -216,8 +213,6 @@ public class BaseActivity extends AppCompatActivity
         params.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         getWindow().setAttributes(params);
     }
-
-
 
 
     /**

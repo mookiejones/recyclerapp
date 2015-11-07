@@ -1,22 +1,20 @@
 package android.com.solutions.nerd.testapp.model;
 
 
-
 import android.support.annotation.NonNull;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by cberman on 12/17/2014.
- */
-public class FirebaseModel {
-    public  static final String FIREBASE_URL = "https://first-mate.firebaseio.com";
-    public static final String USER_KEY = "user_id";
-    public static Map<String,Object>createNewUser(String user_id){
 
-        Map<String,Object> result = new Map<String, Object>() {
+public class FirebaseModel {
+    public static final String FIREBASE_URL = "https://first-mate.firebaseio.com";
+    public static final String USER_KEY = "user_id";
+
+    public static Map<String, Object> createNewUser(String user_id) {
+
+        Map<String, Object> result = new Map<String, Object>() {
             @Override
             public void clear() {
 
@@ -81,7 +79,7 @@ public class FirebaseModel {
             }
         };
 
-        result.put(USER_KEY,user_id);
+        result.put(USER_KEY, user_id);
 
 
         return result;

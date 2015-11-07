@@ -22,9 +22,10 @@ import java.util.List;
  * for Nerd.Solutions
  */
 public class JsonParser {
-    private static final String TAG=JsonParser.class.getSimpleName();
+    private static final String TAG = JsonParser.class.getSimpleName();
     static JSONArray jArray = null;
     static String json = "";
+
     // constructor
     public JsonParser() {
     }
@@ -38,23 +39,23 @@ public class JsonParser {
             URL url = new URL(url_string);
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            json= readStream(in);
+            json = readStream(in);
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
-            urlConnection.disconnect();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
 
         // try parse the string to a JSON object
         try {
-            jArray=new JSONArray(json);
+            jArray = new JSONArray(json);
 
 
-            for(int i=0;i<jArray.length();i++){
-                JSONObject obj=jArray.getJSONObject(i);
+            for (int i = 0; i < jArray.length(); i++) {
+                JSONObject obj = jArray.getJSONObject(i);
                 Boat boat = new Boat(obj);
                 boats.add(boat);
             }
@@ -69,8 +70,7 @@ public class JsonParser {
     }
 
 
-
-    private String readStream(InputStream stream){
+    private String readStream(InputStream stream) {
 
         BufferedReader r = new BufferedReader(new InputStreamReader(stream));
         StringBuilder total = new StringBuilder();

@@ -19,12 +19,10 @@ import java.io.InputStreamReader;
  */
 public class DatabaseTable {
 
-    private static final String TAG = "DictionaryDatabase";
-
     //The columns we'll include in the dictionary table
     public static final String COL_WORD = "WORD";
     public static final String COL_DEFINITION = "DEFINITION";
-
+    private static final String TAG = "DictionaryDatabase";
     private static final String DATABASE_NAME = "DICTIONARY";
     private static final String FTS_VIRTUAL_TABLE = "FTS";
     private static final int DATABASE_VERSION = 1;
@@ -37,20 +35,18 @@ public class DatabaseTable {
 
     private static class DatabaseOpenHelper extends SQLiteOpenHelper {
 
-        private final Context mHelperContext;
-        private SQLiteDatabase mDatabase;
-
         private static final String FTS_TABLE_CREATE =
                 "CREATE VIRTUAL TABLE " + FTS_VIRTUAL_TABLE +
                         " USING fts3 (" +
                         COL_WORD + ", " +
                         COL_DEFINITION + ")";
+        private final Context mHelperContext;
+        private SQLiteDatabase mDatabase;
 
         DatabaseOpenHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
             mHelperContext = context;
         }
-
 
 
         private void loadDictionary() {
@@ -68,9 +64,8 @@ public class DatabaseTable {
         private void loadWords() throws IOException {
             final Resources resources = mHelperContext.getResources();
             InputStream inputStream = resources.openRawResource(R.raw.definitions);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-            try {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     String[] strings = TextUtils.split(line, "-");
@@ -80,8 +75,6 @@ public class DatabaseTable {
                         Log.e(TAG, "unable to add word: " + strings[0].trim());
                     }
                 }
-            } finally {
-                reader.close();
             }
         }
 

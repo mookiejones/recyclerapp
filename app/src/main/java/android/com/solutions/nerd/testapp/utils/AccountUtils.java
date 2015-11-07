@@ -4,35 +4,35 @@ package android.com.solutions.nerd.testapp.utils;
  * Created by mookie on 10/22/15.
  * for Nerd.Solutions
  */
+
 import android.accounts.Account;
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.android.gms.auth.*;
-
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableNotifiedException;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
-
 
 import java.io.IOException;
 import java.util.UUID;
 
 
-
 public class AccountUtils {
-    private static Plus mPlusClient;
-
+    public static final String AUTH_SCOPES[] = {
+            Scopes.PLUS_LOGIN,
+            Scopes.DRIVE_APPFOLDER,
+            "https://www.googleapis.com/auth/userinfo.email"};
+    static final String AUTH_TOKEN_TYPE;
     private static final String TAG = AccountUtils.class.getSimpleName();
-
     private static final String PREF_ACTIVE_ACCOUNT = "chosen_account";
     private static final String FIREBASE_URL = "https://first-mate.firebaseio.com";
-
     // these names are are prefixes; the account is appended to them
     private static final String PREFIX_PREF_AUTH_TOKEN = "auth_token_";
     private static final String PREFIX_PREF_PLUS_PROFILE_ID = "plus_profile_id_";
@@ -40,13 +40,7 @@ public class AccountUtils {
     private static final String PREFIX_PREF_PLUS_IMAGE_URL = "plus_image_url_";
     private static final String PREFIX_PREF_PLUS_COVER_URL = "plus_cover_url_";
     private static final String PREFIX_PREF_GCM_KEY = "gcm_key_";
-
-    public static final String AUTH_SCOPES[] = {
-            Scopes.PLUS_LOGIN,
-            Scopes.DRIVE_APPFOLDER,
-            "https://www.googleapis.com/auth/userinfo.email"};
-
-    static final String AUTH_TOKEN_TYPE;
+    private static Plus mPlusClient;
 
     static {
         StringBuilder sb = new StringBuilder();
@@ -58,6 +52,18 @@ public class AccountUtils {
         AUTH_TOKEN_TYPE = sb.toString();
     }
 
+    private GoogleApiClient.ConnectionCallbacks connectionCallbacks = new GoogleApiClient.ConnectionCallbacks() {
+        @Override
+        public void onConnected(Bundle bundle) {
+
+        }
+
+        @Override
+        public void onConnectionSuspended(int i) {
+
+        }
+    };
+
     private static SharedPreferences getSharedPreferences(final Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
@@ -66,19 +72,21 @@ public class AccountUtils {
         return !TextUtils.isEmpty(getActiveAccountName(context));
     }
 
-    public static String getUserDataUrl(final Context context){
+    public static String getUserDataUrl(final Context context) {
         String id = getPlusProfileId(context);
-        return FIREBASE_URL + "/users/"+id;
+        return FIREBASE_URL + "/users/" + id;
 
     }
-    public static String getUserJourneyTitlesURL(final Context context){
+
+    public static String getUserJourneyTitlesURL(final Context context) {
         String id = getPlusProfileId(context);
-        return FIREBASE_URL + "/id/"+id+"/journeynames/";
+        return FIREBASE_URL + "/id/" + id + "/journeynames/";
 
     }
-    public static String getUserJourneysURL(final Context context){
+
+    public static String getUserJourneysURL(final Context context) {
         String id = getPlusProfileId(context);
-        return FIREBASE_URL + "/id/"+id+"/journeys/";
+        return FIREBASE_URL + "/id/" + id + "/journeys/";
     }
 
     public static String getActiveAccountName(final Context context) {
@@ -196,20 +204,6 @@ public class AccountUtils {
                 PREFIX_PREF_PLUS_IMAGE_URL), null) : null;
     }
 
-
-
-
-    private GoogleApiClient.ConnectionCallbacks connectionCallbacks = new GoogleApiClient.ConnectionCallbacks() {
-        @Override
-        public void onConnected(Bundle bundle) {
-
-        }
-
-        @Override
-        public void onConnectionSuspended(int i) {
-
-        }
-    };
     public static void refreshAuthToken(Context mContext) {
         invalidateAuthToken(mContext);
 //        tryAuthenticateWithErrorNotification(mContext, ScheduleContract.CONTENT_AUTHORITY);

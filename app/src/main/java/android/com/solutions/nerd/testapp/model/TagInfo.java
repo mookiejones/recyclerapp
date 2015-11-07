@@ -8,18 +8,8 @@ import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
-/**
- * Created by cberman on 12/16/2014.
- */
-public class TagInfo implements Parcelable {
-    private String mDescription;
-    private String mCategory;
-    private Uri mPictureUri;
-    private String mAddress1;
-    private String mAddress2;
-    private Location mLocation;
-    private long mId = -1;
 
+public class TagInfo implements Parcelable {
     public static final Creator<TagInfo> CREATOR = new Creator<TagInfo>() {
         @Override
         public TagInfo createFromParcel(Parcel parcel) {
@@ -32,12 +22,19 @@ public class TagInfo implements Parcelable {
         }
 
     };
+    private String mDescription;
+    private String mCategory;
+    private Uri mPictureUri;
+    private String mAddress1;
+    private String mAddress2;
+    private Location mLocation;
+    private long mId = -1;
+    private Context mContext;
 
     public TagInfo(long id) {
         mId = id;
     }
 
-    private Context mContext;
     public TagInfo(Context context) {
 
         mContext = context;
@@ -83,12 +80,12 @@ public class TagInfo implements Parcelable {
         return mPictureUri;
     }
 
-    public void setPictureUri(Uri pictureUri) {
-        this.mPictureUri = pictureUri;
-    }
-
     public void setPictureUri(String uri) {
         setPictureUri(Uri.parse(uri));
+    }
+
+    public void setPictureUri(Uri pictureUri) {
+        this.mPictureUri = pictureUri;
     }
 
     public String getAddress1() {
@@ -107,23 +104,25 @@ public class TagInfo implements Parcelable {
         this.mAddress2 = address2;
     }
 
-    public void setLocation(Location location){
+    public Location getLocation() {
+        return mLocation;
+    }
+
+    public void setLocation(Location location) {
         mLocation = location;
 
-    }
-    public Location getLocation(){
-        return mLocation;
     }
 
     public double getLatitude() {
         return mLocation.getLatitude();
     }
 
-    public LatLng getLatLng(){
-        return new LatLng(this.mLocation.getLatitude(),this.mLocation.getLongitude());
-    }
     public void setLatitude(double latitude) {
         this.mLocation.setLatitude(latitude);
+    }
+
+    public LatLng getLatLng() {
+        return new LatLng(this.mLocation.getLatitude(), this.mLocation.getLongitude());
     }
 
     public double getLongitude() {
@@ -157,9 +156,6 @@ public class TagInfo implements Parcelable {
         parcel.writeDouble(getLatitude());
         parcel.writeDouble(getLongitude());
     }
-
-
-
 
 
 }

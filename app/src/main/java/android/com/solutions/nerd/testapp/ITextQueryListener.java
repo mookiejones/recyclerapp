@@ -6,5 +6,6 @@ package android.com.solutions.nerd.testapp;
  */
 public interface ITextQueryListener {
     void OnTextChanged(String queryText);
+
     boolean UsesQueryText();
 }
