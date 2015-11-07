@@ -1,8 +1,8 @@
 package android.com.solutions.nerd.testapp.main;
 
-import android.com.solutions.nerd.testapp.boat.BoatFragment;
 import android.com.solutions.nerd.testapp.R;
-import android.com.solutions.nerd.testapp.map.WebAISTask;
+import android.com.solutions.nerd.testapp.boat.BoatFragment;
+
 import android.com.solutions.nerd.testapp.search.SearchActivity;
 import android.com.solutions.nerd.testapp.ui.BaseActivity;
 import android.content.Intent;
@@ -12,8 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-
-import com.google.android.gms.maps.model.CameraPosition;
 
 public class MainActivity extends BaseActivity {
 
@@ -37,7 +35,6 @@ public class MainActivity extends BaseActivity {
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        new WebAISTask().execute("");
         // Set Initial fragment
         getSupportFragmentManager()
                 .beginTransaction()

@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.com.solutions.nerd.testapp.R;
 import android.com.solutions.nerd.testapp.main.MainActivity;
+import android.com.solutions.nerd.testapp.model.Ship;
 import android.com.solutions.nerd.testapp.model.TagInfo;
 import android.com.solutions.nerd.testapp.utils.AccountUtils;
 import android.com.solutions.nerd.testapp.utils.PrefUtils;
@@ -17,6 +18,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -32,6 +34,7 @@ import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -42,13 +45,28 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by mookie on 10/22/15.
@@ -56,12 +74,23 @@ import java.util.List;
  */
 public class MapFragment extends Fragment
         implements
+        GoogleMap.OnMapClickListener,
+        GoogleMap.OnMarkerClickListener,
+        GoogleMap.OnMarkerDragListener,
         SharedPreferences.OnSharedPreferenceChangeListener,
         LocationListener,
         GoogleMap.OnInfoWindowClickListener {
     private static final String TAG = MapFragment.class.getSimpleName();
     private static final String tileUrl = "http://earthncseamless.s3.amazonaws.com/{zoom}/{x}/{y}.png";
     private final static LatLng dearborn = new LatLng(42.3222600f, -83.1763100f);
+
+
+    // ===========================================================
+    // Fields
+    // ===========================================================
+    private SharedPreferences mPrefs;
+
+
 
     private FloatingActionButton mDeleteButtoon;
 
@@ -73,6 +102,21 @@ public class MapFragment extends Fragment
 
     private static MapFragment mInstance;
  //   private Firebase mFirebaseJourneys;
+
+    @Override
+    public void onPause()
+    {
+        final SharedPreferences.Editor edit = mPrefs.edit();
+
+        super.onPause();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
 
     /**
      * Called immediately after {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}
@@ -88,6 +132,7 @@ public class MapFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+//        mPrefs =  getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
       //  Firebase.setAndroidContext(this.getActivity());
 
@@ -105,6 +150,18 @@ public class MapFragment extends Fragment
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getBaseContext());
 
 
+
+
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                updateMarkers();
+
+                return false;
+            }
+        });
+
+
         if (mMap == null) {
             setupMapIfNeeded();
         }
@@ -112,6 +169,7 @@ public class MapFragment extends Fragment
 
     }
 
+    private List<Ship> mShips;
     private Menu mFloatingMenu;
 
     private GoogleMap mMap;
@@ -161,7 +219,11 @@ public class MapFragment extends Fragment
     }
 
     private static View view;
-
+    @Override
+    public void onMapClick(LatLng latLng) {
+        mSelectedLatLng = latLng;
+        updateMarkers();
+    }
 
     private void setupMapIfNeeded() {
         if (mMap != null) {
@@ -172,48 +234,21 @@ public class MapFragment extends Fragment
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
                 updateMarkers();
-                WebAISTask t = new WebAISTask();
-                t.doInBackground("");
-
-                //TODO get position
-
             }
         });
 
+        mMap.setOnMarkerDragListener(this);
+        mMap.setOnMarkerClickListener(this);
 
+        // Disable Buttons
 
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        mMap.setBuildingsEnabled(false);
+        mMap.setIndoorEnabled(false);
 
-                selectedMarker = marker;
-                if (selectedMarker != null) {
-//                    removeButton.setVisibility(View.VISIBLE);
-                }
-                mSelectedLatLng = selectedMarker.getPosition();
-                if (marker.isInfoWindowShown())
-                    marker.hideInfoWindow();
-                else
-                    marker.showInfoWindow();
-                return true;
-            }
-        });
-        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-            @Override
-            public void onMarkerDragStart(Marker marker) {
-
-            }
-
-            @Override
-            public void onMarkerDrag(Marker marker) {
-                updatePath();
-            }
-
-            @Override
-            public void onMarkerDragEnd(Marker marker) {
-                updatePath();
-            }
-        });
 
 
         LatLng current = getCurrentLocation();
@@ -236,13 +271,10 @@ public class MapFragment extends Fragment
 
 
         /* Get Current Click Location */
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                mSelectedLatLng = latLng;
-                updateMarkers();
-            }
-        });
+        mMap.setOnMapClickListener(this);
+
+
+
         // Setup Long Click
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
 
@@ -265,10 +297,98 @@ public class MapFragment extends Fragment
     private void updatePath() {
 
     }
-
-    private void updateMarkers() {
-
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        selectedMarker = marker;
+        if (selectedMarker != null) {
+//                    removeButton.setVisibility(View.VISIBLE);
+        }
+        mSelectedLatLng = selectedMarker.getPosition();
+        if (marker.isInfoWindowShown())
+            marker.hideInfoWindow();
+        else
+            marker.showInfoWindow();
+        return true;
     }
+    private void updateMarkers() {
+        LatLngBounds bnd = mMap.getProjection().getVisibleRegion().latLngBounds;
+        new QueryShipsTask().execute(bnd);
+    }
+
+    private class QueryShipsTask extends AsyncTask<LatLngBounds,Void,List<Ship>>{
+        HttpURLConnection urlConnection = null;
+        private static final String url_path="http://ais.boatnerd.com/ship-data.jsonp-alt.php?_1402627434151=";
+
+
+        @Override
+        protected List<Ship> doInBackground(LatLngBounds... bounds) {
+
+            URL url = null;
+            try {
+                String response="";
+                url = new URL(url_path);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+                String s = "";
+                mShips = new ArrayList<>();
+
+                while ((s = reader.readLine()) != null) {
+                    response += s;
+                }
+                response = response.replace("callback(", "");
+                response = response.replace("]);","]}");
+
+                JSONArray jsonArray = new JSONArray(response);
+                for (int i = 0;i<jsonArray.length();i++)
+                {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    mShips.add(new Ship(jsonObject));
+                }
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            List<Ship> ships = new ArrayList<>();
+            LatLngBounds bound = bounds[0];
+            for(Ship ship:mShips){
+                if(bound.contains(ship.getLocation()))
+                    ships.add(ship);
+
+            }
+            return ships;
+
+        }
+
+        /**
+         * <p>Runs on the UI thread after {@link #doInBackground}. The
+         * specified result is the value returned by {@link #doInBackground}.</p>
+         * <p/>
+         * <p>This method won't be invoked if the task was cancelled.</p>
+         *
+         * @param ships The result of the operation computed by {@link #doInBackground}.
+         * @see #onPreExecute
+         * @see #doInBackground
+         * @see #onCancelled(Object)
+         */
+        @Override
+        protected void onPostExecute(List<Ship> ships) {
+            mMap.clear();
+            for(Ship ship:ships){
+                MarkerOptions marker = new MarkerOptions().position(ship.getLocation());
+                marker.snippet(ship.getName());
+                mMap.addMarker(marker);
+            }
+        }
+    }
+
 
     /**
      * Called when a shared preference is changed, added, or removed. This
@@ -375,6 +495,8 @@ public class MapFragment extends Fragment
             }
             Location location = locationManager.getLastKnownLocation(provider);
 
+            if (location==null)
+                return result;
 
            result=new LatLng(location.getLatitude(), location.getLongitude());
         }
@@ -514,4 +636,19 @@ public class MapFragment extends Fragment
         mNotificationManager.notify(notifyID, mBuilder.build());
     }
 
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+        updatePath();
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        updatePath();
+    }
 }
