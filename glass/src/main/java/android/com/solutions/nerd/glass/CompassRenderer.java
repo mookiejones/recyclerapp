@@ -32,6 +32,14 @@ import java.util.concurrent.TimeUnit;
  */
 public class CompassRenderer implements DirectRenderingCallback {
 
+    // About 30 FPS
+    private static final long FRAME_TIME_MILLS=33;
+
+    private SurfaceHolder mHolder;
+
+    private boolean mPaused;
+    private RenderThread mRenderThread;
+
 
     private final TextView mBearingText;
     private final TextView mLatitude;
@@ -50,10 +58,10 @@ public class CompassRenderer implements DirectRenderingCallback {
     /** The duration, in milliseconds, of one frame. */
     private static final long FRAME_TIME_MILLIS = TimeUnit.SECONDS.toMillis(1) / REFRESH_RATE_FPS;
 
-    private SurfaceHolder mHolder;
+
     private boolean mTooSteep;
     private boolean mInterference;
-    private RenderThread mRenderThread;
+
     private int mSurfaceWidth;
     private int mSurfaceHeight;
 
@@ -159,8 +167,6 @@ public class CompassRenderer implements DirectRenderingCallback {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-
         mSurfaceWidth = width;
         mSurfaceHeight = height;
         doLayout();
@@ -170,8 +176,6 @@ public class CompassRenderer implements DirectRenderingCallback {
     public void surfaceCreated(SurfaceHolder holder) {
         LogUtils.LogInfo(TAG,"surfaceCreated");
 
-
-
         // The creation of a new Surface implicitly resumes the rendering.
         mRenderingPaused = false;
         mHolder = holder;
@@ -180,22 +184,22 @@ public class CompassRenderer implements DirectRenderingCallback {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-
         mHolder = null;
         updateRenderingState();
     }
 
     @Override
     public void renderingPaused(SurfaceHolder holder, boolean paused) {
-
         mRenderingPaused = paused;
         updateRenderingState();
     }
 
     private static final NumberFormat formatter = new DecimalFormat("#0.00");
 
+    /**
+     * Start or stop rendering according to the timeline state.
+     */
     private void updateRenderingState() {
-
         boolean shouldRender = (mHolder != null) && !mRenderingPaused;
         boolean isRendering = (mRenderThread != null);
 
@@ -204,13 +208,9 @@ public class CompassRenderer implements DirectRenderingCallback {
                 mOrientationManager.addOnChangedListener(mCompassListener);
                 mOrientationManager.start();
 
-
-
                 if (mOrientationManager.hasLocation()) {
                     Location location = mOrientationManager.getLocation();
                     List<Place> nearbyPlaces = mLandmarks.getNearbyLandmarks(location.getLatitude(), location.getLongitude());
-
-
                     mCompassView.setNearbyPlaces(nearbyPlaces);
                 }
 
@@ -242,6 +242,9 @@ public class CompassRenderer implements DirectRenderingCallback {
         mLayout.measure(measuredWidth, measuredHeight);
         mLayout.layout(0, 0, mLayout.getMeasuredWidth(), mLayout.getMeasuredHeight());
     }
+
+
+
 
     /**
      * Repaints the compass.

@@ -15,6 +15,7 @@ import com.google.android.glass.timeline.LiveCard;
 import com.google.android.glass.timeline.LiveCard.PublishMode;
 import android.com.solutions.nerd.glass.model.Landmarks;
 import android.com.solutions.nerd.glass.util.MathUtils;
+import android.widget.RemoteViews;
 
 /**
  * The main application service that manages the lifetime of the compass live card and the objects
@@ -23,6 +24,16 @@ import android.com.solutions.nerd.glass.util.MathUtils;
 public class CompassService extends Service {
 
     private static final String LIVE_CARD_TAG = "compass";
+    private final CompassBinder mBinder = new CompassBinder();
+
+    private OrientationManager mOrientationManager;
+    private Landmarks mLandmarks;
+    private TextToSpeech mSpeech;
+
+    private LiveCard mLiveCard;
+    private RemoteViews mLiveCardView;
+    private CompassRenderer mRenderer;
+    private static final long DELAY_MILLIS = 30000;
 
     /**
      * A binder that gives other components access to the speech capabilities provided by the
@@ -52,14 +63,7 @@ public class CompassService extends Service {
         }
     }
 
-    private final CompassBinder mBinder = new CompassBinder();
 
-    private OrientationManager mOrientationManager;
-    private Landmarks mLandmarks;
-    private TextToSpeech mSpeech;
-
-    private LiveCard mLiveCard;
-    private CompassRenderer mRenderer;
 
     @Override
     public void onCreate() {
@@ -90,17 +94,29 @@ public class CompassService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (mLiveCard == null) {
+            // Get an instance of a live card
             mLiveCard = new LiveCard(this, LIVE_CARD_TAG);
+
+            // Inflate a layout into a remote view
+           // mLiveCardView = new RemoteViews(getPackageName(),R.layout.compass);
+          //  mLiveCardView.setTextViewText(R.id.bearingLabel, "BearingLabel");
+
+
             mRenderer = new CompassRenderer(this, mOrientationManager, mLandmarks);
 
             mLiveCard.setDirectRenderingEnabled(true).getSurfaceHolder().addCallback(mRenderer);
 
-            // Display the options menu when the live card is tapped.
+            // Set up the live card's action with a pending intent
+            // to show a menu when tapped
             Intent menuIntent = new Intent(this, CompassMenuActivity.class);
             menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
             mLiveCard.setAction(PendingIntent.getActivity(this, 0, menuIntent, 0));
+
+            // Publish the live card
+//            mLiveCard.publish(PublishMode.REVEAL);
             mLiveCard.attach(this);
-            mLiveCard.publish(PublishMode.REVEAL);
+           mLiveCard.publish(PublishMode.REVEAL);
         } else {
             mLiveCard.navigate();
         }
@@ -111,6 +127,9 @@ public class CompassService extends Service {
     @Override
     public void onDestroy() {
         if (mLiveCard != null && mLiveCard.isPublished()) {
+
+            // Stop the handler from queuing more Runnable jobs
+
             mLiveCard.unpublish();
             mLiveCard = null;
         }
