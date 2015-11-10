@@ -71,4 +71,8 @@
     <string name="longitude_label">Longitude:</string>
     <string name="bearing_label">Bearing:</string>
     <string name="speed_label">Speed:</string>
+    <string name="temp_speed">10</string>
+    <string name="speed_title">Speed</string>
+    <string name="bearing_title">Bearing</string>
+    <string name="temp_bearing">230</string>
 </resources>

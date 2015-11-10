@@ -1,19 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    android:useDefaultMargins="true"
+
+
+    android:alignmentMode="alignBounds"
+
+    android:columnOrderPreserved="false"
+    android:rowOrderPreserved="false"
+    android:columnCount="3"
+    android:rowCount="6"
+
     android:background="@android:color/black"
-    android:paddingTop="@dimen/card_margin" >
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alignmentMode="alignMargins"
-        android:columnCount="3"
-        android:columnOrderPreserved="true"
-        android:rowCount="6"
-        android:rowOrderPreserved="true"
-        android:useDefaultMargins="true" >
+    >
+    <!-- Speed -->
+<!--
+
+  android:alignmentMode="alignMargins"
+    android:columnCount="2"
+    android:columnOrderPreserved="false"
+    android:rowCount="6"
+    android:rowOrderPreserved="true"
+    android:background="@android:color/black"
+
+-->
+
+    <LinearLayout
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+            android:layout_width="320dp"
+            android:layout_height="fill_parent"
+
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/speed"
+                style="@style/itemStyle"
+                android:textSize="35sp"
+                android:textStyle="bold"
+                android:text="@string/temp_speed"/>
+
+            <TextView
+                style="@style/itemStyle"
+
+                android:textSize="35sp"
+                android:textColor="#aaa"
+                android:textAllCaps="true"
+                android:text="@string/speed_title"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="320dp"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+            <!-- Bearing -->
+            <TextView
+                style="@style/itemStyle"
+
+                android:textSize="35sp"
+                android:textStyle="bold"
+                android:id="@+id/bearing"
+                android:text="@string/temp_bearing"/>
+
+            <TextView
+                style="@style/itemStyle"
+
+                android:textSize="35sp"
+                android:textColor="#aaa"
+                android:textAllCaps="true"
+
+                android:text="@string/bearing_title"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+        <!-- Speed -->
+
+
+
+
+      <LinearLayout
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:orientation="vertical">
+
         <LinearLayout android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
@@ -37,18 +118,6 @@
                 android:text="@string/longitude_label"
                 style="@style/textLabel" />
 
-            <TextView
-                android:id="@+id/bearingLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/bearing_label"
-                style="@style/textLabel" />
-            <TextView
-                android:id="@+id/speedLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/speed_label"
-                style="@style/textLabel" />
         </LinearLayout>
 
         <LinearLayout
@@ -69,21 +138,11 @@
                 android:id="@+id/longitude"
             style="@style/textValue" />
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/bearing"
-            style="@style/textValue" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
 
-                android:id="@+id/speed"
-                android:textSize="20sp"
-                android:text="SpeedKills"
-                style="@style/textValue" />
+
             </LinearLayout>
 </LinearLayout>
+        </LinearLayout>
 
         <android.com.solutions.nerd.glass.CompassView
             android:id="@+id/compass"
@@ -114,5 +173,3 @@
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </RelativeLayout>
     </GridLayout>
-
-</FrameLayout>

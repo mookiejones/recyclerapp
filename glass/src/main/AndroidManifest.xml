@@ -16,6 +16,7 @@
 
         <activity
             android:name=".CompassMenuActivity"
+            android:immersive="true"
             android:theme="@style/MenuTheme" />
 
         <service

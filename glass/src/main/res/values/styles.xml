@@ -1,7 +1,8 @@
 <resources>
-    <style name="AppTheme">
-
+    <style name="CustomTheme" parent="@android:style/Theme.DeviceDefault">
+        <!-- Theme customization goes here. -->
     </style>
+
     <style name="MenuTheme" parent="@android:style/Theme.DeviceDefault">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
@@ -49,5 +50,11 @@
         <item name="android:layout_gravity">bottom</item>
         <item name="android:layout_row">4</item>
 
+    </style>
+    <style name="itemStyle">
+        <item name="android:textAlignment">center</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">fill_parent</item>
     </style>
 </resources>
