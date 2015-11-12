@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">TestApp</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -63,4 +64,5 @@
     <string name="lwl_title">LWL:</string>
     <string name="tank_title">Tanks</string>
     <string name="rig_type_title">Rig Type:</string>
+    <string name="gcm_key">AIzaSyAErHCGTPXpMDIWHG2tLlo7pVOa-Q7GUI4</string>
 </resources>
