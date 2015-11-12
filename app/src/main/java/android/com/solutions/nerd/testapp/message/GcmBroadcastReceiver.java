@@ -5,8 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import com.nerd.solutions.sailing.web.messaging.Messaging;
-import com.nerd.solutions.sailing.web.registration.Registration;
+
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 
     @Override

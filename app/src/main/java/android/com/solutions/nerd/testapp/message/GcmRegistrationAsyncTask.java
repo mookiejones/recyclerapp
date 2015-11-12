@@ -5,11 +5,7 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
-import com.nerd.solutions.sailing.backend.registration.Registration;
+
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -20,7 +16,7 @@ import java.util.logging.Logger;
  * for Nerd.Solutions
  */
 public class GcmRegistrationAsyncTask extends AsyncTask<Void,Void,String> {
-    private static Registration regService = null;
+//    private static Registration regService = null;
     private GoogleCloudMessaging gcm;
     private Context context;
 
@@ -48,6 +44,8 @@ public class GcmRegistrationAsyncTask extends AsyncTask<Void,Void,String> {
      */
     @Override
     protected String doInBackground(Void... params) {
+    String msg = "";
+    /*
         if (regService == null) {
             Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -83,7 +81,7 @@ public class GcmRegistrationAsyncTask extends AsyncTask<Void,Void,String> {
         } catch (IOException ex) {
             ex.printStackTrace();
             msg = "Error: " + ex.getMessage();
-        }
+        }*/
         return msg;
     }
 
