@@ -1,0 +1,100 @@
+doctype html
+html
+head
+    title Hello Sailor!
+    |     
+    link(rel='stylesheet', href='bower_components/bootstrap/dist/css/bootstrap.min.css')
+    |     
+    link(rel='stylesheet', href='bower_components/bootstrap/dist/css/bootstrap-theme.min.css')
+    |     
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    |     
+    script(src='bower_components/bootstrap/dist/js/bootstrap.min.js')
+  body(role='document', style='padding-top: 70px;')
+    .navbar.navbar-inverse.navbar-fixed-top(role='navigation')
+      .container
+        .navbar-header
+          a.navbar-brand(href='#') Hello, Endpoints!
+        |         
+        .navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | Documentation 
+                b.caret
+              |                     
+              ul.dropdown-menu
+                li
+                  a(href='https://developers.google.com/appengine/docs/java/')
+                    | Google App
+                    | Engine
+                |                         
+                li
+                  a(href='https://developers.google.com/appengine/docs/java/endpoints/')
+                    | Google
+                    | Cloud Endpoints
+                |                         
+                li
+                  a(href='https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/HelloEndpoints')
+                    | Connecting
+                    | your Android application to this backend
+            |                 
+            li
+              a(href='/_ah/api/explorer') Google Cloud Endpoints API Explorer
+            |                 
+            li
+              a(href='https://console.developers.google.com') Google Developers Console
+    .container.theme-showcase(role='main')
+      //
+        Output from Endpoints API call.
+      #outputAlert.alert.alert-success(style='visibility: collapse;')
+      //
+        A form that takes a text value and submits it to the Endpoint,
+        access to the Endpoint is enabled once the client is loaded below.
+      .jumbotron
+        .row
+          .col-lg-12
+            h1 Hello, Endpoints!
+            |                 
+            p
+              | Enter your name and press the button below to call your Google Cloud Endpoints
+              | API.
+            |                 
+            form
+              .input-group
+                input#nameInput.form-control.input-lg(type='text', placeholder='Name')
+                |                           
+                span.input-group-btn
+                  button#helloButton.btn.btn-default.btn-primary.btn-group.btn-lg(type='submit') Say &quot;Hello&quot; &raquo;
+            |                 
+            br
+            |                 
+            p
+              | If you need step-by-step instructions for connecting your Android application to
+              | this backend module, see 
+              a(href='https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/HelloEndpoints')
+                | &quot;App
+                | Engine Java Endpoints Module&quot; template documentation
+              | .
+            |                 
+            p
+              small
+                | For more information about Google App Engine for Java, check out the 
+                a(href='https://developers.google.com/appengine/docs/java/')
+                  | App Engine
+                  | documentation
+                | .
+                br
+                |                         To learn more about Google Cloud Endpoints, see 
+                a(href='https://developers.google.com/appengine/docs/java/endpoints/')
+                  | Cloud
+                  | Endpoints documentation
+                | .
+                br
+                |                         If you&apos;d like to access your generated Google Cloud Endpoints APIs directly,
+                |                         see the 
+                a(href='/_ah/api/explorer') Cloud Endpoints API Explorer
+                | .
+    script(src="app.js" type='text/javascript').
+     
+    script(src='https://apis.google.com/js/client.js?onload=init')

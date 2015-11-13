@@ -4,7 +4,14 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+
+import com.example.mookie.myapplication.backend.registration.Registration;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
+import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 
 import java.io.IOException;
@@ -16,12 +23,12 @@ import java.util.logging.Logger;
  * for Nerd.Solutions
  */
 public class GcmRegistrationAsyncTask extends AsyncTask<Void,Void,String> {
-//    private static Registration regService = null;
+    private static Registration regService = null;
     private GoogleCloudMessaging gcm;
     private Context context;
 
     // TODO: change to your own sender ID to Google Developers Console project number, as per instructions above
-    private static final String SENDER_ID = "1234567890123";
+    private static final String SENDER_ID = "98454823033";
 
     public GcmRegistrationAsyncTask(Context context) {
         this.context = context;
@@ -45,7 +52,7 @@ public class GcmRegistrationAsyncTask extends AsyncTask<Void,Void,String> {
     @Override
     protected String doInBackground(Void... params) {
     String msg = "";
-    /*
+
         if (regService == null) {
             Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -64,7 +71,7 @@ public class GcmRegistrationAsyncTask extends AsyncTask<Void,Void,String> {
             regService = builder.build();
         }
 
-        String msg = "";
+
         try {
             if (gcm == null) {
                 gcm = GoogleCloudMessaging.getInstance(context);
@@ -81,7 +88,7 @@ public class GcmRegistrationAsyncTask extends AsyncTask<Void,Void,String> {
         } catch (IOException ex) {
             ex.printStackTrace();
             msg = "Error: " + ex.getMessage();
-        }*/
+        }
         return msg;
     }
 

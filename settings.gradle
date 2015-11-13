@@ -1,1 +1,1 @@
-include ':app', ':glass', ':servlet'
+include ':app',  ':web_module'

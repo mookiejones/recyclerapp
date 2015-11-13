@@ -1,12 +1,12 @@
 package android.com.solutions.nerd.testapp.servlet;
 
-import android.com.solutions.nerd.testapp.Global;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Pair;
 import android.widget.Toast;
 
-import com.google.appengine.repackaged.com.google.api.client.http.HttpResponse;
+
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

@@ -8,6 +8,7 @@ import android.com.solutions.nerd.testapp.boat.BoatFragment;
 import android.com.solutions.nerd.testapp.camera.CameraFragment;
 import android.com.solutions.nerd.testapp.main.MainFragment;
 import android.com.solutions.nerd.testapp.map.MapFragment;
+import android.com.solutions.nerd.testapp.message.GcmRegistrationAsyncTask;
 import android.com.solutions.nerd.testapp.utils.LogUtils;
 import android.content.Context;
 import android.content.res.Resources;
@@ -52,48 +53,7 @@ public class BaseActivity extends AppCompatActivity
         mTextQueryListener = listener;
     }
 
-    private void getRegId(){
-        new AsyncTask<Void,Void,String>() {
 
-            /**
-             * Override this method to perform a computation on a background thread. The
-             * specified parameters are the parameters passed to {@link #execute}
-             * by the caller of this task.
-             * <p/>
-             * This method can call {@link #publishProgress} to publish updates
-             * on the UI thread.
-             *
-             * @param params The parameters of the task.
-             * @return A result, defined by the subclass of this task.
-             * @see #onPreExecute()
-             * @see #onPostExecute
-             * @see #publishProgress
-             */
-            @Override
-            protected String doInBackground(Void... params) {
-                String msg = "";
-                try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
-                    }
-                    regid = gcm.register(PROJECT_NUMBER);
-                    msg = "Device registered, registration ID=" + regid;
-                    Log.i("GCM",  msg);
-
-
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
-
-                }
-                return msg;
-            }
-            @Override
-            protected void onPostExecute(String msg) {
-                LogUtils.LOGD(TAG,"onPostExecute: "+msg);
-//                etRegId.setText(msg + "\n");
-            }
-        }.execute(null,null,null);
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,9 +70,6 @@ public class BaseActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        getRegId();
-
-
         // Set Initial fragment
         getSupportFragmentManager()
                 .beginTransaction()
@@ -120,6 +77,7 @@ public class BaseActivity extends AppCompatActivity
                 .commit();
 
 
+        new GcmRegistrationAsyncTask(getApplicationContext()).execute();
 
     }
 
