@@ -1,6 +1,7 @@
 package android.com.solutions.nerd.testapp;
 
 import android.com.solutions.nerd.testapp.boat.Boat;
+import android.com.solutions.nerd.testapp.utils.LogUtils;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -59,6 +60,9 @@ public class JsonParser {
                 Boat boat = new Boat(obj);
                 boats.add(boat);
             }
+
+            Log.d(TAG, "Found " + String.valueOf(boats.size()) + " boats.");
+
 
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());

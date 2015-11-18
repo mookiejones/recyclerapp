@@ -12,7 +12,6 @@ import android.com.solutions.nerd.testapp.message.GcmRegistrationAsyncTask;
 import android.com.solutions.nerd.testapp.utils.LogUtils;
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -32,7 +31,6 @@ import android.widget.SearchView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -108,13 +106,11 @@ public class BaseActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d(TAG, query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.d(TAG, newText);
 
                 if (mTextQueryListener != null)
                     mTextQueryListener.OnTextChanged(newText);
@@ -180,6 +176,7 @@ public class BaseActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
+
 
         } else if (id == R.id.nav_send) {
 

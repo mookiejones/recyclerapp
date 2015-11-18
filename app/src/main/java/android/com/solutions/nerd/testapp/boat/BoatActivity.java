@@ -2,10 +2,13 @@ package android.com.solutions.nerd.testapp.boat;
 
 import android.com.solutions.nerd.testapp.R;
 import android.com.solutions.nerd.testapp.ui.BaseActivity;
+import android.com.solutions.nerd.testapp.utils.LogUtils;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -18,12 +21,16 @@ public class BoatActivity extends BaseActivity {
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
         return super.onCreateView(parent, name, context, attrs);
+
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         boolean shouldBeFloatingWindow = shouldBeFloatingWindow();
 
+
+        Log.e(LogUtils.getLogTag(BoatActivity.class),"BoatActivity.onCreate");
         if (shouldBeFloatingWindow) {
             setupFloatingWindow(R.dimen.session_details_floating_width,
                     R.dimen.session_details_floating_height, 1, 0.4f);

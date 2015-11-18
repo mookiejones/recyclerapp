@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frontCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/card"
+    android:padding="@dimen/card_padding"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation"
+    app:cardUseCompatPadding="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/card_header_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        >
+        <TextView
+            android:id="@+id/title"
+            tools:text="Irwin 43-CC MKI"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/padding_normal"
+            android:layout_marginLeft="@dimen/padding_normal"
+            android:textAppearance="@style/TextAppearance.Title"
+            android:ellipsize="end"
+            android:maxLines="1"
+
+            android:textSize="14sp"
+            android:paddingStart="15dip"
+            android:textColor="?android:textColorSecondary"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/boatFront"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="fill"
+                android:orientation="vertical">
+
+
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/image_background">
+                    <ImageView
+                        android:id="@+id/boatThumbnail"
+                        android:scaleType="centerInside"
+                        android:maxHeight="50sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:cropToPadding="true"
+                        tools:src="@drawable/boat_sample"
+                        android:contentDescription="boatImage" />
+                </FrameLayout>
+
+
+                <LinearLayout
+                    android:layout_marginTop="24dp"
+                    android:id="@+id/rig_typeContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    tools:visibility="gone">
+
+                    <TextView
+                        android:textSize="24sp"
+                        android:id="@+id/rig_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/LabelStyle"
+
+                        tools:text="Cutter"
+
+                        />
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/yearText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Year(s) 1984"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    />
+                <TextView
+                    android:id="@+id/designer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Ted Irwin"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"/>
+            </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/more_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="gone">
+            <include layout="@layout/boat_row_back"
+                android:id="@+id/flipRear" />
+        </LinearLayout>
+
+    </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

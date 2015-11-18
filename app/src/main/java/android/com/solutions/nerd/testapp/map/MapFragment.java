@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.location.Criteria;
 import android.location.Location;
@@ -30,6 +31,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Config;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -116,7 +118,10 @@ public class MapFragment extends Fragment
 
     @Override
     public void onPause() {
-        final SharedPreferences.Editor edit = mPrefs.edit();
+        if (mPrefs!=null){
+            final SharedPreferences.Editor edit = mPrefs.edit();
+
+        }
 
         super.onPause();
     }
@@ -140,18 +145,6 @@ public class MapFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-//        mPrefs =  getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-
-        //  Firebase.setAndroidContext(this.getActivity());
-
-        // Set Text
-        /*if (mFirebaseJourneys==null)
-        {
-            String url = AccountUtils.getUserJourneysURL(this.getActivity());
-            mFirebaseJourneys = new Firebase(url);
-        }*/
-
         if (mMap == null) {
             setupMapIfNeeded();
         }
@@ -209,7 +202,7 @@ public class MapFragment extends Fragment
         }
         return view;
 
-//        return super.onCreateView(inflater, container, savedInstanceState);
+
 
     }
 
@@ -249,14 +242,7 @@ public class MapFragment extends Fragment
             CameraPosition cp = new CameraPosition(current, 8, 0, 0);
 
             CameraUpdate cu = CameraUpdateFactory.newCameraPosition(cp);
-            String dataUrl = AccountUtils.getUserDataUrl(this.getActivity());
-/*
-            Firebase ref = new Firebase(AccountUtils.getUserDataUrl(this.getActivity()));
 
-            Firebase child = ref.child("location");
-            child.setValue(current);
-
-*/
 
             mMap.moveCamera(cu);
 
@@ -374,9 +360,10 @@ public class MapFragment extends Fragment
     private LatLng getCurrentLocation() {
         LatLng result = null;
 
-        //noinspection PointlessBooleanExpression
-//        if (!Config.DEBUG)
-        //           return dearborn;
+        if (!Config.DEBUG)
+            return dearborn;
+
+
 
         LocationManager locationManager = (LocationManager) this.getActivity().getSystemService(Context.LOCATION_SERVICE);
         boolean enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -424,7 +411,7 @@ public class MapFragment extends Fragment
         switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
+
                     Snackbar.make(view, "WRITE_CONTACTS Accepted", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     getCurrentLocation();

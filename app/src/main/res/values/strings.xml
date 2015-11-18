@@ -65,4 +65,8 @@
     <string name="tank_title">Tanks</string>
     <string name="rig_type_title">Rig Type:</string>
     <string name="gcm_key">AIzaSyAErHCGTPXpMDIWHG2tLlo7pVOa-Q7GUI4</string>
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="title_year">Year:</string>
+    <string name="ballast_label">Ballast</string>
 </resources>

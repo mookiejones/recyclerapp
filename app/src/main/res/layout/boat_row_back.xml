@@ -2,13 +2,12 @@
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/rearCard"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+
 
         <LinearLayout
             android:id="@+id/hullContainer"
@@ -21,24 +20,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/hull_title" />
-
             <TextView
                 android:id="@+id/hull"
                 style="@style/ValueStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/hull_title" />
+                tools:text="Fin with rudder on skeg."/>
+
         </LinearLayout>
         <LinearLayout
             android:id="@+id/rig_typeContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="fill_horizontal"
-
             android:orientation="horizontal">
 
             <TextView
                 style="@style/LabelStyle"
+                android:id="@+id/rigLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/rig_type_title" />
@@ -48,156 +47,88 @@
                 style="@style/ValueStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/rig_type_title" />
+                tools:text="Cutter"/>
         </LinearLayout>
-</LinearLayout>
+
 
         <LinearLayout
+            android:id="@+id/loaContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/LabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loa_title" />
+
+            <TextView
+                android:id="@+id/loa"
+                style="@style/ValueStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="45.50' / 13.87m"
+/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lwlContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/LabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lwl_title" />
+
+            <TextView
+                android:id="@+id/lwl"
+                style="@style/ValueStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="35.50' / 10.82m" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/beamContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/LabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/beam_title" />
+
+            <TextView
+                android:id="@+id/beam"
+                style="@style/ValueStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="1358' / 4.14m"/>
+        </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4sp"
+        android:orientation="vertical">
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/loaContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/LabelStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/loa_title" />
-
-                <TextView
-                    android:id="@+id/loa"
-                    style="@style/ValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/loa_title" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lwlContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/LabelStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/lwl_title" />
-
-                <TextView
-                    android:id="@+id/lwl"
-                    style="@style/ValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/lwl_title" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/beamContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/LabelStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/beam_title" />
-
-                <TextView
-                    android:id="@+id/beam"
-                    style="@style/ValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/beam_title" />
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-
+            android:text="@string/ballast_label"
+            android:textAlignment="center"
+            android:textStyle="bold" />
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4sp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ballast"
-                android:textAlignment="center"
-                android:textStyle="bold" />
-            <LinearLayout
-                android:id="@+id/bal_dispContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/LabelStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bal_disp_title" />
-
-                <TextView
-                    android:id="@+id/bal_disp"
-                    style="@style/ValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bal_disp_title" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/bal_typeContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/LabelStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bal_type_title" />
-
-                <TextView
-                    android:id="@+id/bal_type"
-                    style="@style/ValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bal_type_title" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ballastContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/LabelStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ballast_title" />
-
-                <TextView
-                    android:id="@+id/ballast"
-                    style="@style/ValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ballast_title" />
-            </LinearLayout>
-        </LinearLayout>
-
-
-
-        <LinearLayout
-            android:id="@+id/builderContainer"
+            android:id="@+id/bal_dispContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -206,18 +137,18 @@
                 style="@style/LabelStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/builder_title" />
+                android:text="@string/bal_disp_title" />
 
             <TextView
-                android:id="@+id/builder"
+                android:id="@+id/bal_disp"
                 style="@style/ValueStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/builder_title" />
+                tools:text="30.77%"/>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/constructContainer"
+            android:id="@+id/bal_typeContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -226,18 +157,18 @@
                 style="@style/LabelStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/construct_title" />
+                android:text="@string/bal_type_title" />
 
             <TextView
-                android:id="@+id/construct"
+                android:id="@+id/bal_type"
                 style="@style/ValueStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/construct_title" />
+                tools:text="Lead"/>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/dispContainer"
+            android:id="@+id/ballastContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -246,554 +177,599 @@
                 style="@style/LabelStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/disp_title" />
+                android:text="@string/ballast_title" />
 
             <TextView
-                android:id="@+id/disp"
+                android:id="@+id/ballast"
                 style="@style/ValueStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/disp_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/draft_maxContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/draft_max_title" />
-
-            <TextView
-                android:id="@+id/draft_max"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/draft_max_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/draft_minContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/draft_min_title" />
-
-            <TextView
-                android:id="@+id/draft_min"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/draft_min_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/eContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/e_title" />
-
-            <TextView
-                android:id="@+id/e"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/e_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/eyContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ey_title" />
-
-            <TextView
-                android:id="@+id/ey"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ey_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/first_builtContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/first_build_title" />
-
-            <TextView
-                android:id="@+id/first_built"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/first_build_title" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/hpContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/hp_title" />
-
-            <TextView
-                android:id="@+id/hp"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/hp_title" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/iContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/i_title" />
-
-            <TextView
-                android:id="@+id/i"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/i_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/imagesContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/images_title" />
-
-            <TextView
-                android:id="@+id/images"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/images_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ispContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/isp_title" />
-
-            <TextView
-                android:id="@+id/isp"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/isp_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/jContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/j_title" />
-
-            <TextView
-                android:id="@+id/j"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/j_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/last_builtContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/last_build_title" />
-
-            <TextView
-                android:id="@+id/last_built"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/last_build_title" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/makeContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/make_title" />
-
-            <TextView
-                android:id="@+id/make"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/make_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/mast_heightContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mast_height_title" />
-
-            <TextView
-                android:id="@+id/mast_height"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mast_height_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/modelContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/model_title" />
-
-            <TextView
-                android:id="@+id/model"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/model_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/moreContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/more_title" />
-
-            <TextView
-                android:id="@+id/more"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/more_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/num_builtContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/num_built_title" />
-
-            <TextView
-                android:id="@+id/num_built"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/num_built_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/pContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/p_title" />
-
-            <TextView
-                android:id="@+id/p"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="p" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/pyContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/py_title" />
-
-            <TextView
-                android:id="@+id/py"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/py_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/sa_dispContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sa_disp_title" />
-
-            <TextView
-                android:id="@+id/sa_disp"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sa_disp_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/sa_foreContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sa_fore_title" />
-
-            <TextView
-                android:id="@+id/sa_fore"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sa_fore_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/sa_listContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sa_list_title" />
-
-            <TextView
-                android:id="@+id/sa_list"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sa_list_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/splContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/spl_title" />
-
-            <TextView
-                android:id="@+id/spl"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/spl_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/total_calcContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/total_calc_title" />
-
-            <TextView
-                android:id="@+id/total_calc"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/total_calc_title" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/typeContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LabelStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/type_title" />
-
-            <TextView
-                android:id="@+id/type"
-                style="@style/ValueStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/type_title" />
-        </LinearLayout>
-
-
-
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/GroupItemStyle"
-                    android:text="@string/tank_title"/>
-
-
-                <LinearLayout
-                    android:id="@+id/fuelContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/LabelStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fuel_title" />
-
-                    <TextView
-                        android:id="@+id/fuel"
-                        style="@style/ValueStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fuel_title" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/waterContainer"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        style="@style/LabelStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/water_title" />
-                    <TextView
-                        android:id="@+id/water"
-                        style="@style/ValueStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/water_title" />
-                </LinearLayout>
-
-
-
-
+                tools:text="8000 lbs. / 3629 kgs." />
         </LinearLayout>
     </LinearLayout>
 
+
+
+    <LinearLayout
+        android:id="@+id/builderContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/builder_title" />
+
+        <TextView
+            android:id="@+id/builder"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Ted Irwin"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/constructContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/construct_title" />
+
+        <TextView
+            android:id="@+id/construct"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="FG"/>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/draft_maxContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/draft_max_title" />
+
+        <TextView
+            android:id="@+id/draft_max"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="4.92' /1.50m" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/draft_minContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/draft_min_title" />
+
+        <TextView
+            android:id="@+id/draft_min"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text=""/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/eContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/e_title" />
+
+        <TextView
+            android:id="@+id/e"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="19.00' / 5.79m" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/eyContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ey_title" />
+
+        <TextView
+            android:id="@+id/ey"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="19.00' / 5.79m" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/first_builtContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/first_build_title" />
+
+        <TextView
+            android:id="@+id/first_built"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="1984"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/hpContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hp_title" />
+
+        <TextView
+            android:id="@+id/hp"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text=""  />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/iContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/i_title" />
+
+        <TextView
+            android:id="@+id/i"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="53.75' / 16.38m" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/imagesContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/images_title" />
+
+        <TextView
+            android:id="@+id/images"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/images_title" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ispContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/isp_title" />
+
+        <TextView
+            android:id="@+id/isp"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text=""  />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/jContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/j_title" />
+
+        <TextView
+            android:id="@+id/j"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="19.25' / 5.87"  />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/last_builtContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/last_build_title" />
+
+        <TextView
+            android:id="@+id/last_built"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/makeContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/make_title" />
+
+        <TextView
+            android:id="@+id/make"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mast_heightContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mast_height_title" />
+
+        <TextView
+            android:id="@+id/mast_height"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="58.00' / 17.68m" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/modelContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/model_title" />
+
+        <TextView
+            android:id="@+id/model"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/moreContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/more_title" />
+
+        <TextView
+            android:id="@+id/more"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/num_builtContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/num_built_title" />
+
+        <TextView
+            android:id="@+id/num_built"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/p_title" />
+
+        <TextView
+            android:id="@+id/p"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="46.17' / 14.07m" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pyContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/py_title" />
+
+        <TextView
+            android:id="@+id/py"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text=""/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sa_dispContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/saDispLabel"
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sa_disp_title" />
+
+        <TextView
+            android:id="@+id/sa_disp"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="17.50" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sa_foreContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sa_fore_title" />
+
+        <TextView
+            android:id="@+id/sa_fore"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="517.34 ft" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sa_listContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sa_list_title" />
+
+        <TextView
+            android:id="@+id/sa_list"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="956ft"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/splContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/spl_title" />
+
+        <TextView
+            android:id="@+id/spl"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/total_calcContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_calc_title" />
+
+        <TextView
+            android:id="@+id/total_calc"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="955.96ft" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/typeContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/type_title" />
+
+        <TextView
+            android:id="@+id/type"
+            style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text=""/>
+    </LinearLayout>
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/GroupItemStyle"
+            android:text="@string/tank_title"/>
+
+
+        <LinearLayout
+            android:id="@+id/fuelContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/LabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fuel_title" />
+
+            <TextView
+                android:id="@+id/fuel"
+                style="@style/ValueStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="107 gals. /405 ltrs." />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/waterContainer"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                style="@style/LabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/water_title" />
+            <TextView
+                android:id="@+id/water"
+                style="@style/ValueStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="185 gals. /700 ltrs" />
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+</LinearLayout>

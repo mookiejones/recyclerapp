@@ -37,8 +37,6 @@ public class MainActivity extends BaseActivity {
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        new ServletPostAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
-
         // Set Initial fragment
         getSupportFragmentManager()
                 .beginTransaction()
