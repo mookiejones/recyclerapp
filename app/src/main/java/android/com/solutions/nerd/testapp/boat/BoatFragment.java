@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class BoatFragment extends Fragment
     BoatParser mParser;
     List<Boat> boatList;
 
+    private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
 
     public static BoatFragment getInstance() {
@@ -58,6 +60,7 @@ public class BoatFragment extends Fragment
         View view = inflater.inflate(R.layout.boat_fragment, null);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
+        mProgressBar = (ProgressBar)view.findViewById(R.id.progressBar);
 
         // use a linear layout manager
          RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
@@ -68,7 +71,15 @@ public class BoatFragment extends Fragment
 
         registerForContextMenu(mRecyclerView);
 
-        OnTextChanged("Irwin");
+     //   OnTextChanged("Irwin");
+
+        mProgressBar.setIndeterminate(true);
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        if (mParser != null)
+            mParser.cancel(true);
+        mParser = new BoatParser(true);
+        mParser.execute("");
 
         return view;
     }
@@ -92,6 +103,9 @@ public class BoatFragment extends Fragment
 
     @Override
     public void OnTextChanged(String queryText) {
+
+        mProgressBar.setIndeterminate(true);
+        mProgressBar.setVisibility(View.VISIBLE);
         Log.d(TAG, queryText);
         if (mParser != null)
             mParser.cancel(true);
@@ -121,6 +135,12 @@ public class BoatFragment extends Fragment
 
     private class BoatParser extends AsyncTask<String, String, List<Boat>> {
 
+        private boolean mIsSample;
+        public BoatParser(){}
+        public BoatParser(boolean isSample){
+            mIsSample=isSample;
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -129,7 +149,8 @@ public class BoatFragment extends Fragment
         @Override
         protected List<Boat> doInBackground(String... args) {
 
-            JsonParser jParser = new JsonParser();
+            JsonParser jParser = new JsonParser(mIsSample);
+
             return jParser.getBoatsFromUrl(args[0]);
         }
 
@@ -146,6 +167,8 @@ public class BoatFragment extends Fragment
 
 
 
+            mProgressBar.setIndeterminate(false);
+            mProgressBar.setVisibility(View.GONE);
 
         }
     }

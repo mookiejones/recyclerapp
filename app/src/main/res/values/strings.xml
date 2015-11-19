@@ -69,4 +69,5 @@
     <string name="title_item_detail">Item Detail</string>
     <string name="title_year">Year:</string>
     <string name="ballast_label">Ballast</string>
+    <string name="boat_label">Boats</string>
 </resources>

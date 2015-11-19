@@ -27,16 +27,19 @@ public class JsonParser {
     static JSONArray jArray = null;
     static String json = "";
 
+    private boolean mIsSample=false;
     // constructor
-    public JsonParser() {
+    public JsonParser(boolean isSample) {
+        mIsSample=isSample;
     }
+    public JsonParser(){}
 
     public List<Boat> getBoatsFromUrl(String args) {
         HttpURLConnection urlConnection = null;
         List<Boat> boats = new ArrayList<>();
 
         try {
-            String url_string = Global.getApiPath(args);
+            String url_string = Global.getApiPath(args,mIsSample);
             URL url = new URL(url_string);
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());

@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.com.solutions.nerd.testapp.HomeFragment;
 import android.com.solutions.nerd.testapp.ITextQueryListener;
 import android.com.solutions.nerd.testapp.R;
+import android.com.solutions.nerd.testapp.boat.BoatActivity;
 import android.com.solutions.nerd.testapp.boat.BoatFragment;
 import android.com.solutions.nerd.testapp.camera.CameraFragment;
 import android.com.solutions.nerd.testapp.main.MainFragment;
@@ -11,6 +12,7 @@ import android.com.solutions.nerd.testapp.map.MapFragment;
 import android.com.solutions.nerd.testapp.message.GcmRegistrationAsyncTask;
 import android.com.solutions.nerd.testapp.utils.LogUtils;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -164,6 +166,9 @@ public class BaseActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             fragment = HomeFragment.getInstance();
         } else if (id == R.id.nav_boat) {
+//            Intent intent = new Intent(getBaseContext(),BoatActivity.class);
+//            startActivity(intent);
+//            return true;
 
             fragment = BoatFragment.getInstance();
         } else if (id == R.id.nav_camera) {
