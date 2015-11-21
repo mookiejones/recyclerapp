@@ -1,6 +1,5 @@
 package android.com.solutions.nerd.testapp.boat;
 
-import android.com.solutions.nerd.testapp.Global;
 import android.com.solutions.nerd.testapp.ITextQueryListener;
 import android.com.solutions.nerd.testapp.JsonParser;
 import android.com.solutions.nerd.testapp.R;
@@ -19,14 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.InterruptedIOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,8 +101,6 @@ public class BoatFragment extends Fragment
         mParser.execute(queryText);
 
 
-        ImageListParser imageListParser = new ImageListParser();
-        imageListParser.execute(queryText);
     }
 
     @Override
@@ -130,68 +119,6 @@ public class BoatFragment extends Fragment
         }
     }
 
-
-    private class ImageListParser extends AsyncTask<String, String, List<String>> {
-
-        /**
-         * Override this method to perform a computation on a background thread. The
-         * specified parameters are the parameters passed to {@link #execute}
-         * by the caller of this task.
-         * <p/>
-         * This method can call {@link #publishProgress} to publish updates
-         * on the UI thread.
-         *
-         * @param params The parameters of the task.
-         * @return A result, defined by the subclass of this task.
-         * @see #onPreExecute()
-         * @see #onPostExecute
-         * @see #publishProgress
-         */
-        @Override
-        protected List<String> doInBackground(String... params) {
-            HttpURLConnection urlConnection = null;
-            List<String> images = new ArrayList<>();
-            String result = "";
-            try {
-                String url_string = Global.getImageSearchUrl(params[0]);
-                URL url = new URL(url_string);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                result = readStream(in);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-            }
-            return images;
-
-
-        }
-
-
-        private String readStream(InputStream stream) {
-
-            BufferedReader r = new BufferedReader(new InputStreamReader(stream));
-            StringBuilder total = new StringBuilder();
-            String line;
-
-            try {
-                while ((line = r.readLine()) != null) {
-                    total.append(line);
-                }
-            } catch (InterruptedIOException e) {
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return total.toString();
-
-        }
-
-    }
 
     private class BoatParser extends AsyncTask<String, String, List<Boat>> {
 

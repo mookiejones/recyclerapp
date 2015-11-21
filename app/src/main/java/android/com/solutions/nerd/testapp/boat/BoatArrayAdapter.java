@@ -59,6 +59,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         super.onAttachedToRecyclerView(recyclerView);
     }
 
+
     @Override
     public CustomBoatHolder onCreateViewHolder(ViewGroup viewGroup, final int position) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.boat_card, null);
@@ -122,6 +123,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
             String urlString = Global.api_image_path+img+".jpg";
             customBoatHolder.boatImage.setImageUrl(urlString);
         }
+
 
         String title = boatItem.getTitle();
         customBoatHolder.titleText.setText(title);
