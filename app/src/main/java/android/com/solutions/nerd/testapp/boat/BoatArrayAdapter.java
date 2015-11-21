@@ -29,23 +29,23 @@ import java.util.List;
 public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.CustomBoatHolder> {
     private static final String TAG = BoatArrayAdapter.class.getSimpleName();
     protected static CustomBoatHolder mSelectedBoat;
+    protected static int width = 0;
     private final Context mContext;
     private List<Boat> boatList;
     private int lastPosition = -1;
-
-
     private int mPosition;
-    public void setPosition(int position){
-        mPosition=position;
-    }
-    public int getPosition(){
-        return mPosition;
-    }
-
 
     public BoatArrayAdapter(Context context, List<Boat> boatList) {
         this.boatList = boatList;
         mContext = context;
+    }
+
+    public int getPosition(){
+        return mPosition;
+    }
+
+    public void setPosition(int position) {
+        mPosition = position;
     }
 
     @Override
@@ -76,10 +76,6 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         return mHolder;
     }
 
-
-    protected static int width=0;
-
-
     private void setAnimation(View viewToAnimate, int position) {
         // If the bound view wasn't previously displayed on screen, it's animated
         if (position > lastPosition) {
@@ -90,7 +86,6 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
     }
 
 
-    private float initialX;
     @Override
     public void onBindViewHolder(final CustomBoatHolder customBoatHolder, int i) {
 
@@ -123,7 +118,10 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
 
             Picasso
                     .with(mContext)
+
                     .load(urlString)
+                    .fit()
+                    .centerCrop()
                     .into(customBoatHolder.boatImage);
         }
 
