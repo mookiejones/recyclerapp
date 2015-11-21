@@ -16,37 +16,58 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <LinearLayout
+        <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/card_header_height"
-        android:background="?android:selectableItemBackground"
-        android:baselineAligned="false"
         android:clickable="true"
         android:focusable="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        >
+            android:orientation="horizontal">
+
+
+            <android.com.solutions.nerd.testapp.helpers.PicassoImage
+                android:id="@+id/boatThumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/BoatImageDescription"
+                android:scaleType="fitXY"
+
+                tools:src="@drawable/boat_sample" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/boatThumbnail"
+                android:background="#90FFFFFF"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp">
         <TextView
             android:id="@+id/title"
-            android:layout_width="0dp"
+            style="@style/HeaderTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
 
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_normal"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:paddingStart="15dip"
-            android:textAppearance="@style/TextAppearance.Title"
-
-            android:textColor="?android:textColorSecondary"
-            android:textSize="14sp"
+            android:layout_gravity="center_horizontal"
             tools:text="Irwin 43-CC MKI" />
-    </LinearLayout>
-    <LinearLayout
+
+                <TextView
+                    android:id="@+id/rig_type"
+
+                    style="@style/HeaderTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+
+                    tools:text="Cutter" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
-        android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/boatFront"
@@ -54,42 +75,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="fill"
                 android:orientation="vertical">
-
-
-
-
-                    <ImageView
-                        android:id="@+id/boatThumbnail"
-                        android:layout_width="match_parent"
-                        android:layout_height="50sp"
-                        android:layout_gravity="center_horizontal|top"
-                        android:contentDescription="boatImage"
-
-                        android:maxHeight="50sp"
-                        tools:src="@drawable/boat_sample" />
-
-
-                <LinearLayout
-                    android:id="@+id/rig_typeContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:orientation="horizontal"
-                    tools:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/rig_type"
-                        style="@style/LabelStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="24sp"
-
-                        tools:text="Cutter"
-
-                        />
-                </LinearLayout>
-
-
                 <TextView
                     android:id="@+id/yearText"
                     android:layout_width="wrap_content"
@@ -112,7 +97,7 @@
             android:id="@+id/more_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+
             tools:visibility="gone">
 
             <include
@@ -121,5 +106,25 @@
         </LinearLayout>
 
     </LinearLayout>
+
+        <!-- Separator -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="8dp"
+            android:background="@color/material_grey_600" />
+
+
+        <!-- Card Footer -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_margin="4dp">
+
+            <include layout="@layout/boat_card_footer" />
+
+
+        </LinearLayout>
     </LinearLayout>
+
 </android.support.v7.widget.CardView>

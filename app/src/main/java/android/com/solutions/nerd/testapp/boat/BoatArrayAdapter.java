@@ -2,10 +2,16 @@ package android.com.solutions.nerd.testapp.boat;
 
 import android.com.solutions.nerd.testapp.Global;
 import android.com.solutions.nerd.testapp.R;
+import android.com.solutions.nerd.testapp.helpers.PicassoImage;
+import android.com.solutions.nerd.testapp.utils.LogUtils;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,8 +24,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 /**
@@ -27,20 +31,21 @@ import java.util.List;
  * for Nerd.Solutions
  */
 public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.CustomBoatHolder> {
-    private static final String TAG = BoatArrayAdapter.class.getSimpleName();
+    private static final String TAG = LogUtils.getLogTag(BoatArrayAdapter.class);
     protected static CustomBoatHolder mSelectedBoat;
     protected static int width = 0;
+    private static float initialX;
     private final Context mContext;
     private List<Boat> boatList;
     private int lastPosition = -1;
     private int mPosition;
-
     public BoatArrayAdapter(Context context, List<Boat> boatList) {
         this.boatList = boatList;
         mContext = context;
 
     }
 
+    @SuppressWarnings("unused")
     public int getPosition(){
         return mPosition;
     }
@@ -69,7 +74,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         mHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                setPosition(mHolder.getPosition());
+                setPosition(mHolder.getAdapterPosition());
                 return false;
             }
         });
@@ -115,19 +120,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
 
         if (img != null && !img.isEmpty()) {
             String urlString = Global.api_image_path+img+".jpg";
-
-
-            Picasso
-
-                    .with(mContext)
-
-                    .load(urlString)
-                            //.fit()
-//                    .transform(CropSquareTransformation.getInstance())
-                    .resize(width, 150)
-//                    .centerCrop()
-
-                    .into(customBoatHolder.boatImage);
+            customBoatHolder.boatImage.setImageUrl(urlString);
         }
 
         String title = boatItem.getTitle();
@@ -303,33 +296,82 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
             customBoatHolder.sa_list.setText(sa_list);
             customBoatHolder.sa_listContainer.setVisibility(sa_list.isEmpty() ? vis_state : View.VISIBLE);
 
-            //spl
+            /* spl */
             String spl = boatItem.getSpl();
             customBoatHolder.spl.setText(spl);
             customBoatHolder.splContainer.setVisibility(spl.isEmpty() ? vis_state : View.VISIBLE);
 
 
-//total_calc
+            /* total_calc */
             String total_calc = boatItem.getTotal_calc();
             customBoatHolder.total_calc.setText(total_calc);
             customBoatHolder.total_calcContainer.setVisibility(total_calc.isEmpty() ? vis_state : View.VISIBLE);
 
-            //type
+            /* type */
             String type = boatItem.getType();
             customBoatHolder.type.setText(type);
             customBoatHolder.typeContainer.setVisibility(type.isEmpty() ? vis_state : View.VISIBLE);
 
-//water
+            /* water */
             String water = boatItem.getWater();
             customBoatHolder.water.setText(water);
             customBoatHolder.waterContainer.setVisibility(water.isEmpty() ? vis_state : View.VISIBLE);
 
 
-            customBoatHolder.designerText.setText(boatItem.getDesigner());
+
             customBoatHolder.titleText.setText(boatItem.getTitle());
             customBoatHolder.rigText.setText(boatItem.getRig_type());
 
 
+        customBoatHolder.shareView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, "Share Link clicked");
+                Snackbar.make(v, "Share Link Clicked", Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+        customBoatHolder.editView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, "Edit Link clicked");
+                Snackbar.make(v, "Edit Link Clicked", Snackbar.LENGTH_SHORT).show();
+            }
+
+
+        });
+        customBoatHolder.boatView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, "GET WebLink");
+                Snackbar.make(v, "GET WebLink", Snackbar.LENGTH_SHORT).show();
+                String url = "http://www.example.com";
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+
+                intent.setData(Uri.parse(url));
+                mContext.startActivity(intent);
+
+                Log.e(TAG, "Boat Link clicked");
+                Snackbar.make(v, "Boat Link Clicked", Snackbar.LENGTH_SHORT).show();
+            }
+
+        });
+
+        customBoatHolder.plusOneView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+
+        });
+        customBoatHolder.favoriteView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, "Favorite Link clicked");
+                Snackbar.make(v, "Favorite Link Clicked", Snackbar.LENGTH_SHORT).show();
+            }
+
+        });
 
     }
 
@@ -346,7 +388,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         implements View.OnCreateContextMenuListener, View.OnTouchListener{
 
 
-        protected ImageView boatImage;
+        protected PicassoImage boatImage;
         protected TextView designerText;
         protected TextView titleText;
         protected TextView rigText;
@@ -366,8 +408,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         protected LinearLayout constructContainer;
         protected TextView designer;
         protected LinearLayout designerContainer;
-        protected TextView disp;
-        protected LinearLayout dispContainer;
+
         protected TextView draft_max;
         protected LinearLayout draft_maxContainer;
         protected TextView draft_min;
@@ -414,11 +455,11 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         protected LinearLayout pyContainer;
         protected TextView rig_type_label;
         protected TextView rig_type;
-        protected LinearLayout rig_typeContainer;
+
         protected TextView sa_disp;
         protected TextView sa_disp_label;
 
-        protected LinearLayout sa_dispContainer;
+
         protected TextView sa_fore;
         protected LinearLayout sa_foreContainer;
         protected TextView sa_list;
@@ -439,7 +480,12 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
 
         protected View itemView;
 
-        private float initialX;
+        protected ImageView boatView;
+        protected ImageView shareView;
+        protected ImageView editView;
+        protected ImageView favoriteView;
+        protected ImageView plusOneView;
+
         public CustomBoatHolder(View itemView) {
 
             super(itemView);
@@ -447,12 +493,20 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
             itemView.setOnCreateContextMenuListener(this);
 
 
+            boatView = (ImageView) itemView.findViewById(R.id.boatLink);
+            plusOneView = (ImageView) itemView.findViewById(R.id.plusOneLink);
+            favoriteView = (ImageView) itemView.findViewById(R.id.favoriteLink);
+            editView = (ImageView) itemView.findViewById(R.id.editLink);
+            shareView = (ImageView) itemView.findViewById(R.id.shareLink);
+
+
             this.boatYears = (TextView) itemView.findViewById(R.id.yearText);
             this.titleText = (TextView) itemView.findViewById(R.id.title);
-            this.boatImage = (ImageView) itemView.findViewById(R.id.boatThumbnail);
+            this.boatImage = (PicassoImage) itemView.findViewById(R.id.boatThumbnail);
             this.rigText = (TextView) itemView.findViewById(R.id.rig_type);
             this.rig_type_label=(TextView)itemView.findViewById(R.id.rigLabel);
-            this.designerText = (TextView) itemView.findViewById(R.id.designer);
+            this.designer = (TextView) itemView.findViewById(R.id.designer);
+
 
 
             this.frontCard = (CardView) itemView.findViewById(R.id.frontCard);
@@ -461,18 +515,14 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
 
 
             this.boatFront=(LinearLayout)itemView.findViewById(R.id.boatFront);
+//            boatImage.setOnTouchListener(this);
             itemView.setOnTouchListener(this);
 
-
-
-
             itemView.setMinimumWidth(width);
-//            this.viewFlipper.setMinimumWidth(width);
-//
- //           viewFlipper.setInAnimation(itemView.getContext(),R.anim.slide_in_from_right);
-   //         viewFlipper.setOutAnimation(itemView.getContext(),R.anim.slide_out_to_left);
+
 
             this.boatLength=(TextView)itemView.findViewById(R.id.loa);
+            this.loa = (TextView) itemView.findViewById(R.id.loa);
 
             this.bal_disp=(TextView)itemView.findViewById(R.id.bal_disp);
             this.bal_dispContainer=(LinearLayout)itemView.findViewById(R.id.bal_dispContainer);
@@ -480,164 +530,161 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
             this.bal_type=(TextView)itemView.findViewById(R.id.bal_type);
             this.bal_typeContainer=(LinearLayout)itemView.findViewById(R.id.bal_typeContainer);
 
-            // ballast
+            /* ballast */
             this.ballast=(TextView)itemView.findViewById(R.id.ballast);
             this.ballastContainer=(LinearLayout)itemView.findViewById(R.id.ballastContainer);
 
-            // beam
+            /* beam */
             this.beam=(TextView)itemView.findViewById(R.id.beam);
             this.beamContainer=(LinearLayout)itemView.findViewById(R.id.beamContainer);
 
 
-            // builder
+            /* builder */
             this.builder=(TextView)itemView.findViewById(R.id.builder);
             this.builderContainer=(LinearLayout)itemView.findViewById(R.id.builderContainer);
 
-            // construct
+            /* construct */
             this.construct=(TextView)itemView.findViewById(R.id.construct);
             this.constructContainer=(LinearLayout)itemView.findViewById(R.id.constructContainer);
 
 
-            boolean pass=false;
 
-                // designer
-                this.designer = (TextView) itemView.findViewById(R.id.designer);
+
+                /* designer */
                 this.designerContainer = (LinearLayout) itemView.findViewById(R.id.designerContainer);
 
 
 
 
-                // draft_max
+                /* draft_max */
                 this.draft_max = (TextView) itemView.findViewById(R.id.draft_max);
                 this.draft_maxContainer = (LinearLayout) itemView.findViewById(R.id.draft_maxContainer);
 
-                // draft_min
+                /* draft_min */
                 this.draft_min = (TextView) itemView.findViewById(R.id.draft_min);
                 this.draft_minContainer = (LinearLayout) itemView.findViewById(R.id.draft_minContainer);
 
-                // e
+                /* e */
                 this.e = (TextView) itemView.findViewById(R.id.e);
                 this.eContainer = (LinearLayout) itemView.findViewById(R.id.eContainer);
 
-                // ey
+                /* ey */
                 this.ey = (TextView) itemView.findViewById(R.id.ey);
                 this.eyContainer = (LinearLayout) itemView.findViewById(R.id.eyContainer);
 
-                // first_built
+                /* first_built */
                 this.first_built = (TextView) itemView.findViewById(R.id.first_built);
                 this.first_builtContainer = (LinearLayout) itemView.findViewById(R.id.first_builtContainer);
 
-                // fuel
+                /* fuel */
                 this.fuel = (TextView) itemView.findViewById(R.id.fuel);
                 this.fuelContainer = (LinearLayout) itemView.findViewById(R.id.fuelContainer);
 
-                // hp
+                /* hp */
                 this.hp = (TextView) itemView.findViewById(R.id.hp);
                 this.hpContainer = (LinearLayout) itemView.findViewById(R.id.hpContainer);
 
-                // hull
+                /* hull */
                 this.hull = (TextView) itemView.findViewById(R.id.hull);
                 this.hullContainer = (LinearLayout) itemView.findViewById(R.id.hullContainer);
 
-                // i
+                /* i */
                 this.i = (TextView) itemView.findViewById(R.id.i);
                 this.iContainer = (LinearLayout) itemView.findViewById(R.id.iContainer);
 
-                // images
+                /* images */
                 this.images = (TextView) itemView.findViewById(R.id.images);
                 this.imagesContainer = (LinearLayout) itemView.findViewById(R.id.imagesContainer);
 
-                // isp
+                /* isp */
                 this.isp = (TextView) itemView.findViewById(R.id.isp);
                 this.ispContainer = (LinearLayout) itemView.findViewById(R.id.ispContainer);
 
-                // j
+                /* j */
                 this.j = (TextView) itemView.findViewById(R.id.j);
                 this.jContainer = (LinearLayout) itemView.findViewById(R.id.jContainer);
 
-                // last_built
+                /* last_built */
                 this.last_built = (TextView) itemView.findViewById(R.id.last_built);
                 this.last_builtContainer = (LinearLayout) itemView.findViewById(R.id.last_builtContainer);
 
-                // loa
-                this.loa = (TextView) itemView.findViewById(R.id.loa);
+                /* loa */
+
                 this.loaContainer = (LinearLayout) itemView.findViewById(R.id.loaContainer);
 
-                // lwl
+                /* lwl */
                 this.lwl = (TextView) itemView.findViewById(R.id.lwl);
                 this.lwlContainer = (LinearLayout) itemView.findViewById(R.id.lwlContainer);
 
-                // make
+                /* make */
                 this.make = (TextView) itemView.findViewById(R.id.make);
                 this.makeContainer = (LinearLayout) itemView.findViewById(R.id.makeContainer);
 
-                // mast_height
+                /* mast_height */
                 this.mast_height = (TextView) itemView.findViewById(R.id.mast_height);
                 this.mast_heightContainer = (LinearLayout) itemView.findViewById(R.id.mast_heightContainer);
 
-                // model
+                /* model */
                 this.model = (TextView) itemView.findViewById(R.id.model);
                 this.modelContainer = (LinearLayout) itemView.findViewById(R.id.modelContainer);
 
-                // more
+                /* more */
                 this.more = (TextView) itemView.findViewById(R.id.more);
                 this.moreContainer = (LinearLayout) itemView.findViewById(R.id.moreContainer);
 
-                // num_built
+                /* num_built */
                 this.num_built = (TextView) itemView.findViewById(R.id.num_built);
                 this.num_builtContainer = (LinearLayout) itemView.findViewById(R.id.num_builtContainer);
 
-                // p
+                /* p */
                 this.p = (TextView) itemView.findViewById(R.id.p);
                 this.pContainer = (LinearLayout) itemView.findViewById(R.id.pContainer);
 
-                // py
+                /* py */
                 this.py = (TextView) itemView.findViewById(R.id.py);
                 this.pyContainer = (LinearLayout) itemView.findViewById(R.id.pyContainer);
 
-                // rig_type
+                /* rig_type */
                 this.rig_type = (TextView) itemView.findViewById(R.id.rig_type);
-                this.rig_typeContainer = (LinearLayout) itemView.findViewById(R.id.rig_typeContainer);
 
 
-                // sa_disp
+
+                /* sa_disp */
                 this.sa_disp = (TextView) itemView.findViewById(R.id.sa_disp);
                 this.sa_disp_label = (TextView) itemView.findViewById(R.id.saDispLabel);
-                ;
 
-                // sa_fore
+                /* sa_fore */
                 this.sa_fore = (TextView) itemView.findViewById(R.id.sa_fore);
                 this.sa_foreContainer = (LinearLayout) itemView.findViewById(R.id.sa_foreContainer);
 
-                // sa_list
+                /* sa_list */
                 this.sa_list = (TextView) itemView.findViewById(R.id.sa_list);
                 this.sa_listContainer = (LinearLayout) itemView.findViewById(R.id.sa_listContainer);
 
-                // spl
+                /* spl */
                 this.spl = (TextView) itemView.findViewById(R.id.spl);
                 this.splContainer = (LinearLayout) itemView.findViewById(R.id.splContainer);
 
 
-                // total_calc
+                /* total_calc */
                 this.total_calc = (TextView) itemView.findViewById(R.id.total_calc);
                 this.total_calcContainer = (LinearLayout) itemView.findViewById(R.id.total_calcContainer);
 
-                // type
+                /* type */
                 this.type = (TextView) itemView.findViewById(R.id.type);
                 this.typeContainer = (LinearLayout) itemView.findViewById(R.id.typeContainer);
 
-                // water
+                /* water */
                 this.water = (TextView) itemView.findViewById(R.id.water);
                 this.waterContainer = (LinearLayout) itemView.findViewById(R.id.waterContainer);
-                // Beam
+
+                /* Beam */
                 this.beam = (TextView) itemView.findViewById(R.id.beam);
                 this.beamContainer = (LinearLayout) itemView.findViewById(R.id.beamContainer);
 
 
-
 //            cardView.setPreventCornerOverlap(false);
         }
-
         /**
          * Called when a touch event is dispatched to a view. This allows listeners to
          * get a chance to respond before the target view.
@@ -659,7 +706,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
                     initialX=event.getX();
                     return true;
                 case MotionEvent.ACTION_UP:
-                    LinearLayout more = (LinearLayout)v.findViewById(R.id.more_info);
+                    LinearLayout more = (LinearLayout) v.findViewById(R.id.main_content);
                     more.setVisibility(more.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
 
 

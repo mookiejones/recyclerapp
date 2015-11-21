@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="28dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/boatLink"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="4sp"
+        android:src="@drawable/ic_directions_boat_black_24dp"
+        tools:src="@drawable/ic_directions_boat_black_24dp"
+
+
+        />
+
+    <ImageView
+        android:id="@+id/favoriteLink"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="4sp"
+        android:src="@drawable/ic_favorite_black_24dp"
+        tools:src="@drawable/ic_favorite_black_24dp"
+
+        />
+
+    <ImageView
+        android:id="@+id/editLink"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="4sp"
+        android:src="@drawable/ic_mode_edit_black_24dp"
+        tools:src="@drawable/ic_mode_edit_black_24dp"
+
+        />
+
+    <ImageView
+        android:id="@+id/plusOneLink"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="4sp"
+        android:src="@drawable/ic_plus_one_black_24dp"
+        tools:src="@drawable/ic_plus_one_black_24dp"
+
+        />
+
+    <ImageView
+        android:id="@+id/shareLink"
+
+        style="@style/BoatFooter"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_share_black_24dp"
+        tools:src="@drawable/ic_share_black_24dp" />
+
+</LinearLayout>
