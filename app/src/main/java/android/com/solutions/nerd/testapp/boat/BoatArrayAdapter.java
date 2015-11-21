@@ -38,6 +38,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
     public BoatArrayAdapter(Context context, List<Boat> boatList) {
         this.boatList = boatList;
         mContext = context;
+
     }
 
     public int getPosition(){
@@ -117,11 +118,15 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
 
 
             Picasso
+
                     .with(mContext)
 
                     .load(urlString)
-                    .fit()
-                    .centerCrop()
+                            //.fit()
+//                    .transform(CropSquareTransformation.getInstance())
+                    .resize(width, 150)
+//                    .centerCrop()
+
                     .into(customBoatHolder.boatImage);
         }
 

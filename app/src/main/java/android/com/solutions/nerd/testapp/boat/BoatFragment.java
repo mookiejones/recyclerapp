@@ -13,11 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -88,14 +84,6 @@ public class BoatFragment extends Fragment
     @Override
     public void onViewCreated(View view,@Nullable Bundle savedInstanceState){
         super.onViewCreated(view,savedInstanceState);
-
-       BoatArrayAdapter adapter = new BoatArrayAdapter(getActivity(), new ArrayList<Boat>());
-
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(adapter);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
 
@@ -162,11 +150,7 @@ public class BoatFragment extends Fragment
 
             final BoatArrayAdapter adapter = new BoatArrayAdapter(getContext(), boatList);
 
-
             mRecyclerView.setAdapter(adapter);
-
-
-
             mProgressBar.setIndeterminate(false);
             mProgressBar.setVisibility(View.GONE);
 
