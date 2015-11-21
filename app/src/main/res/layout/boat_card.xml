@@ -6,8 +6,8 @@
     android:id="@+id/frontCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/card"
     android:padding="@dimen/card_padding"
+    app:cardBackgroundColor="@color/card"
     app:cardCornerRadius="@dimen/card_corner_radius"
     app:cardElevation="@dimen/card_elevation"
     app:cardUseCompatPadding="true">
@@ -19,29 +19,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/card_header_height"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:baselineAligned="false"
         android:background="?android:selectableItemBackground"
+        android:baselineAligned="false"
         android:clickable="true"
         android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         >
         <TextView
             android:id="@+id/title"
-            tools:text="Irwin 43-CC MKI"
-
             android:layout_width="0dp"
+
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="@dimen/padding_normal"
-            android:layout_marginLeft="@dimen/padding_normal"
-            android:textAppearance="@style/TextAppearance.Title"
+            android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-
-            android:textSize="14sp"
             android:paddingStart="15dip"
-            android:textColor="?android:textColorSecondary"/>
+            android:textAppearance="@style/TextAppearance.Title"
+
+            android:textColor="?android:textColorSecondary"
+            android:textSize="14sp"
+            tools:text="Irwin 43-CC MKI" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,36 +58,31 @@
 
 
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/image_background">
                     <ImageView
                         android:id="@+id/boatThumbnail"
-                        android:scaleType="centerInside"
-                        android:maxHeight="50sp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:cropToPadding="true"
-                        tools:src="@drawable/boat_sample"
-                        android:contentDescription="boatImage" />
-                </FrameLayout>
+                        android:layout_height="50sp"
+                        android:layout_gravity="center_horizontal|top"
+                        android:contentDescription="boatImage"
+
+                        android:maxHeight="50sp"
+                        tools:src="@drawable/boat_sample" />
 
 
                 <LinearLayout
-                    android:layout_marginTop="24dp"
                     android:id="@+id/rig_typeContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
                     android:orientation="horizontal"
                     tools:visibility="gone">
 
                     <TextView
-                        android:textSize="24sp"
                         android:id="@+id/rig_type"
+                        style="@style/LabelStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/LabelStyle"
+                        android:textSize="24sp"
 
                         tools:text="Cutter"
 
@@ -100,17 +94,17 @@
                     android:id="@+id/yearText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Year(s) 1984"
-                    android:paddingStart="16dp"
                     android:paddingEnd="16dp"
+                    android:paddingStart="16dp"
+                    tools:text="Year(s) 1984"
                     />
                 <TextView
                     android:id="@+id/designer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Ted Irwin"
+                    android:paddingEnd="16dp"
                     android:paddingStart="16dp"
-                    android:paddingEnd="16dp"/>
+                    tools:text="Ted Irwin" />
             </LinearLayout>
 
 
@@ -120,8 +114,10 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             tools:visibility="gone">
-            <include layout="@layout/boat_row_back"
-                android:id="@+id/flipRear" />
+
+            <include
+                android:id="@+id/flipRear"
+                layout="@layout/boat_row_back" />
         </LinearLayout>
 
     </LinearLayout>
