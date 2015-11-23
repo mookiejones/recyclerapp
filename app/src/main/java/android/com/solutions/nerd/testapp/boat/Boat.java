@@ -416,7 +416,9 @@ public class Boat {
                 }
             }
             try {
-                JSONArray jArray = new JSONArray(result);
+                JSONObject jsonObject = new JSONObject(result);
+                JSONObject parentObject = jsonObject.getJSONObject("responseData");
+                JSONArray jArray = parentObject.getJSONArray("results");
 
 
                 for (int i = 0; i < jArray.length(); i++) {
