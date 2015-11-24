@@ -191,6 +191,7 @@ public class BaseActivity extends AppCompatActivity
             fragment = MapFragment.getInstance();
 
 
+
         }
         List<Fragment> fragments = fragmentManager.getFragments();
         if (fragments != null && fragments.size() > 0) {

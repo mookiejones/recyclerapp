@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -30,6 +31,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Config;
 import android.util.Log;
 import android.view.InflateException;
@@ -125,10 +128,7 @@ public class MapFragment extends Fragment
 
     @Override
     public void onPause() {
-        if (mPrefs!=null){
-            final SharedPreferences.Editor edit = mPrefs.edit();
 
-        }
 
         super.onPause();
     }
@@ -136,6 +136,7 @@ public class MapFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
+
 
     }
 
@@ -175,6 +176,17 @@ public class MapFragment extends Fragment
         setHasOptionsMenu(true);
 
     }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // retain this fragment
+        setRetainInstance(true);
+    }
+
+
 
     /**
      * Called to have the fragment instantiate its user interface view.
@@ -224,6 +236,8 @@ public class MapFragment extends Fragment
         if (mMap != null) {
             return;
         }
+
+
         mMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
@@ -265,7 +279,10 @@ public class MapFragment extends Fragment
                 //          ((TextView)v.findViewById(R.id.course)).setText(mShip.getCourse());
                 ((TextView) v.findViewById(R.id.heading)).setText(mShip.getHeading());
                 ((TextView) v.findViewById(R.id.length)).setText(mShip.getLength());
-                ((TextView) v.findViewById(R.id.link)).setText(mShip.getLink());
+                final TextView linkView = (TextView)v.findViewById(R.id.link);
+                linkView.setText(Html.fromHtml("<a href=\"" + mShip.getLink() + "\">More</a>"));
+                linkView.setMovementMethod(LinkMovementMethod.getInstance());
+
                 ((TextView) v.findViewById(R.id.name)).setText(mShip.getName());
 
 
@@ -275,8 +292,12 @@ public class MapFragment extends Fragment
                             .load(mShip.getPicture())
                             .into(img);
                 }
+                String route = mShip.getRoute();
 
-                ((TextView) v.findViewById(R.id.route)).setText(mShip.getRoute());
+                ((TextView) v.findViewById(R.id.route)).setText(route);
+
+
+
 
                 ((TextView) v.findViewById(R.id.status)).setText(mShip.getStatus());
                 ((TextView) v.findViewById(R.id.type)).setText(mShip.getType());
@@ -321,6 +342,7 @@ public class MapFragment extends Fragment
             mMap.moveCamera(cu);
 
         }
+
 
 
         /* Get Current Click Location */
@@ -689,7 +711,22 @@ public class MapFragment extends Fragment
             mShips.clear();
 
             for (Ship ship : ships) {
+                List<LatLng> routePoints = ship.getRoutePoints();
 
+
+                LatLng[] points =  routePoints.toArray(new LatLng[routePoints.size()]);
+
+
+
+                for(LatLng latLng:ship.getRoutePoints()){
+                    // Add a thin red line from London to New York.
+                    Polyline line = mMap.addPolyline(new PolylineOptions()
+                            .add(points)
+                            .width(5)
+                            .color(Color.RED));
+
+
+                }
                 mShips.put(ship.getMmsi(), ship);
                 MarkerOptions marker = new MarkerOptions()
 

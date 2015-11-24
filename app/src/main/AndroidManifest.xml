@@ -85,6 +85,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:configChanges="orientation|screenSize"
             android:name=".map.MapsActivity"
             android:label="@string/title_activity_maps" >
             <meta-data

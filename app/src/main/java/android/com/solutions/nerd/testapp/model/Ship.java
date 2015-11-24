@@ -1,5 +1,6 @@
 package android.com.solutions.nerd.testapp.model;
 
+import android.com.solutions.nerd.testapp.utils.LogUtils;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -8,12 +9,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by mookie on 11/7/15.
  * for Nerd.Solutions
  */
 public class Ship {
 
+    private static final String TAG= LogUtils.getLogTag(Ship.class);
 
     public static final String MMSI = "mmsi";
     public static final String LAT = "lat";
@@ -119,6 +124,30 @@ public class Ship {
         }
     }
 
+
+    public List<LatLng> getRoutePoints(){
+        if (route.isEmpty())
+            return null;
+
+        List<LatLng> result= new ArrayList<>();
+        String[] splitRoute=route.split(",");
+        for(String s:splitRoute){
+            String[] routePath=s.split(" ");
+        Log.d(TAG,"splitThe Route");
+            String lat = routePath[0];
+            String lng = routePath[1];
+            double dLat=Double.parseDouble(lat);
+            double dLng=Double.parseDouble(lng);
+            result.add(new LatLng(dLat,dLng));
+
+
+        }
+
+
+        return result;
+
+
+    }
     public String getId() {
         return id;
     }
