@@ -19,6 +19,8 @@
         <TextView
             android:id="@+id/info_title"
             style="@style/InfoCardValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             tools:text="Title" />
 
 
@@ -28,11 +30,15 @@
 
         <TextView
             style="@style/InfoCardLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:text="Destination: " />
 
         <TextView
             android:id="@+id/destination"
             style="@style/InfoCardValue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             tools:text="Destination" />
     </LinearLayout>
 
@@ -40,11 +46,16 @@
 
         <TextView
             style="@style/InfoCardLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:text="Draft: " />
 
         <TextView
             android:id="@+id/draft"
             style="@style/InfoCardValue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
             tools:text="Draft" />
     </LinearLayout>
 
@@ -52,11 +63,15 @@
 
         <TextView
             style="@style/InfoCardLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:text="Eta:" />
 
         <TextView
             android:id="@+id/eta"
             style="@style/InfoCardValue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             tools:text="Eta" />
 
     </LinearLayout>
@@ -65,11 +80,15 @@
 
         <TextView
             style="@style/InfoCardLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:text="Heading: " />
 
         <TextView
             android:id="@+id/heading"
             style="@style/InfoCardValue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             tools:text="Heading" />
     </LinearLayout>
 
@@ -77,21 +96,29 @@
 
         <TextView
             style="@style/InfoCardLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:text="Lat: " />
 
         <TextView
             android:id="@+id/lat"
             style="@style/InfoCardValue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             tools:text="Lat" />
 
         <TextView
             style="@style/InfoCardLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:text=" Lng: " />
 
 
         <TextView
             android:id="@+id/lng"
             style="@style/InfoCardValue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             tools:text="Lng" />
 
     </LinearLayout>
@@ -100,33 +127,58 @@
 
         <TextView
             style="@style/InfoCardLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:text="Length: " />
 
         <TextView
             android:id="@+id/length"
             style="@style/InfoCardValue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             tools:text="Length" />
 
         <TextView
             style="@style/InfoCardLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
 
             android:text=" Width: " />
 
         <TextView
             android:id="@+id/width"
             style="@style/ValueStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             tools:text="Width" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/boat_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20sp"
+            android:src="@drawable/ic_more_horiz_black_24dp" />
+    </RelativeLayout>
 
 
     <TextView
         android:id="@+id/link"
         style="@style/InfoCardValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         tools:text="Link" />
-
     <TextView
         android:id="@+id/route"
         style="@style/InfoCardValue"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         tools:text="Route"
 
         />
@@ -134,26 +186,36 @@
     <TextView
         android:id="@+id/picture"
         style="@style/InfoCardValue"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         tools:text="Picture" />
 
     <TextView
         android:id="@+id/speed"
         style="@style/InfoCardValue"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         tools:text="Speed" />
 
     <TextView
         android:id="@+id/type"
         style="@style/InfoCardValue"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         tools:text="Type" />
 
     <TextView
         android:id="@+id/course"
         style="@style/InfoCardValue"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         tools:text="Course" />
 
     <TextView
         android:id="@+id/name"
         style="@style/InfoCardValue"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
 
         tools:text="Name" />
 
@@ -161,12 +223,16 @@
 
         <TextView
             style="@style/InfoCardLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
 
             android:text="Status: " />
 
         <TextView
             android:id="@+id/status"
             style="@style/InfoCardValue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             tools:text="@string/status_label" />
     </LinearLayout>
 

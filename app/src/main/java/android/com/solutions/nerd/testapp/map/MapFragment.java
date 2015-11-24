@@ -17,6 +17,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -244,11 +245,14 @@ public class MapFragment extends Fragment
 
             @Override
             public View getInfoContents(Marker marker) {
-                View v = getLayoutInflater(savedInstanceState).inflate(R.layout.map_info_window, null);
+
+                final View v = getLayoutInflater(savedInstanceState).inflate(R.layout.map_info_window, null);
+
+
                 String id = marker.getId();
                 String snippet = marker.getSnippet();
 
-                Ship mShip = mShips.get(snippet);
+                final Ship mShip = mShips.get(snippet);
 
                 ((TextView) v.findViewById(R.id.info_title)).setText(marker.getTitle());
                 ((TextView) v.findViewById(R.id.destination)).setText(mShip.getDestination());
@@ -277,6 +281,20 @@ public class MapFragment extends Fragment
                 ((TextView) v.findViewById(R.id.status)).setText(mShip.getStatus());
                 ((TextView) v.findViewById(R.id.type)).setText(mShip.getType());
                 ((TextView) v.findViewById(R.id.width)).setText(mShip.getWidth());
+
+                ((FloatingActionButton) v.findViewById(R.id.boat_more)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mShip.getLink().isEmpty())
+                            return;
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+                        intent.setData(Uri.parse(mShip.getLink()));
+                        startActivity(intent);
+
+
+                    }
+                });
 
                 //Width
 
