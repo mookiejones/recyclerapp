@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -97,7 +96,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
 
 
     @Override
-    public void onBindViewHolder(final CustomBoatHolder customBoatHolder, int i) {
+    public void onBindViewHolder(CustomBoatHolder customBoatHolder, int i) {
 
         Boat boatItem = boatList.get(i);
         
@@ -123,6 +122,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         String img = boatItem.getImage(0);
 
         if (img != null && !img.isEmpty()) {
+            customBoatHolder.boatImage.setImageDrawable(null);
             String urlString = Global.api_image_path+img+".jpg";
             Log.i(TAG,"image is "+urlString);
             customBoatHolder.boatImage.setImageUrl(img);

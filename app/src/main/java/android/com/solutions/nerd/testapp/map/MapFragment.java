@@ -7,13 +7,11 @@ import android.com.solutions.nerd.testapp.R;
 import android.com.solutions.nerd.testapp.main.MainActivity;
 import android.com.solutions.nerd.testapp.model.Ship;
 import android.com.solutions.nerd.testapp.model.TagInfo;
-import android.com.solutions.nerd.testapp.utils.AccountUtils;
 import android.com.solutions.nerd.testapp.utils.PrefUtils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.location.Criteria;
 import android.location.Location;
@@ -39,11 +37,14 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -51,6 +52,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,7 +68,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 //import com.firebase.client.Firebase;
 
@@ -92,12 +96,14 @@ public class MapFragment extends Fragment
     //   private Firebase mFirebaseJourneys;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     private final int mDistance = 100;
+    private HashMap<String, Ship> mShips = new HashMap<>();
     // ===========================================================
     // Fields
     // ===========================================================
     private SharedPreferences mPrefs;
+
     private FloatingActionButton mDeleteButtoon;
-    private List<Ship> mShips;
+
     private Menu mFloatingMenu;
     private GoogleMap mMap;
     @SuppressWarnings("UnusedDeclaration")
@@ -206,6 +212,7 @@ public class MapFragment extends Fragment
 
     }
 
+
     @Override
     public void onMapClick(LatLng latLng) {
         mSelectedLatLng = latLng;
@@ -231,17 +238,50 @@ public class MapFragment extends Fragment
 
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
-            public View getInfoWindow(Marker marker) {
-                if (marker.getId() != null && mMarkers != null && mMarkers.size() > 0) {
-
-                }
+            public View getInfoWindow(final Marker marker) {
                 return null;
             }
 
             @Override
             public View getInfoContents(Marker marker) {
-                View v=getLayoutInflater(savedInstanceState).inflate(R.layout.map_info_window,null);
+                View v = getLayoutInflater(savedInstanceState).inflate(R.layout.map_info_window, null);
+                String id = marker.getId();
+                String snippet = marker.getSnippet();
+
+                Ship mShip = mShips.get(snippet);
+
+                ((TextView) v.findViewById(R.id.info_title)).setText(marker.getTitle());
+                ((TextView) v.findViewById(R.id.destination)).setText(mShip.getDestination());
+                ((TextView) v.findViewById(R.id.draft)).setText(mShip.getDraft());
+                ((TextView) v.findViewById(R.id.lat)).setText(String.valueOf(mShip.getLat()));
+                ((TextView) v.findViewById(R.id.lng)).setText(String.valueOf(mShip.getLng()));
+
+                ((TextView) v.findViewById(R.id.speed)).setText(mShip.getSpeed());
+                ((TextView) v.findViewById(R.id.eta)).setText(mShip.getEta());
+                //          ((TextView)v.findViewById(R.id.course)).setText(mShip.getCourse());
+                ((TextView) v.findViewById(R.id.heading)).setText(mShip.getHeading());
+                ((TextView) v.findViewById(R.id.length)).setText(mShip.getLength());
+                ((TextView) v.findViewById(R.id.link)).setText(mShip.getLink());
+                ((TextView) v.findViewById(R.id.name)).setText(mShip.getName());
+
+
+                final ImageView img = (ImageView) v.findViewById(R.id.marker_image);
+                if (!mShip.getPicture().isEmpty()) {
+                    Picasso.with(getContext())
+                            .load(mShip.getPicture())
+                            .into(img);
+                }
+
+                ((TextView) v.findViewById(R.id.route)).setText(mShip.getRoute());
+
+                ((TextView) v.findViewById(R.id.status)).setText(mShip.getStatus());
+                ((TextView) v.findViewById(R.id.type)).setText(mShip.getType());
+                ((TextView) v.findViewById(R.id.width)).setText(mShip.getWidth());
+
+                //Width
+
                 return v;
+
 
             }
         });
@@ -577,7 +617,7 @@ public class MapFragment extends Fragment
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
                 String s = "";
-                mShips = new ArrayList<>();
+
 
                 while ((s = reader.readLine()) != null) {
                     response += s;
@@ -588,7 +628,8 @@ public class MapFragment extends Fragment
                 JSONArray jsonArray = new JSONArray(response);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    mShips.add(new Ship(jsonObject));
+                    Ship ship = new Ship(jsonObject);
+                    mShips.put(ship.getMmsi(), ship);
                 }
 
 
@@ -602,7 +643,9 @@ public class MapFragment extends Fragment
 
             List<Ship> ships = new ArrayList<>();
             LatLngBounds bound = bounds[0];
-            for (Ship ship : mShips) {
+            Set<String> keys = mShips.keySet();
+            for (String key : keys) {
+                Ship ship = mShips.get(key);
                 if (bound.contains(ship.getLocation()))
                     ships.add(ship);
 
@@ -625,14 +668,19 @@ public class MapFragment extends Fragment
         @Override
         protected void onPostExecute(List<Ship> ships) {
             mMap.clear();
+            mShips.clear();
+
             for (Ship ship : ships) {
+
+                mShips.put(ship.getMmsi(), ship);
                 MarkerOptions marker = new MarkerOptions()
+
                         .title(ship.getName())
-                        .snippet(ship.getCallsign())
+                        .snippet(ship.getMmsi())
 
+
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
                         .position(ship.getLocation());
-                marker.snippet(ship.getName());
-
 
 
                 mMap.addMarker(marker);

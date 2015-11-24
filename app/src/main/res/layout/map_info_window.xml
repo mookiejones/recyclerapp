@@ -1,6 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout style="@style/InfoCardContainer">
+
+        <ImageView
+            android:id="@+id/marker_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="image"
+
+            tools:layout_height="34dp"
+            tools:layout_width="34dp" />
+
+        <TextView
+            android:id="@+id/info_title"
+            style="@style/InfoCardValue"
+            tools:text="Title" />
+
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/InfoCardContainer">
+
+        <TextView
+            style="@style/InfoCardLabel"
+            android:text="Destination: " />
+
+        <TextView
+            android:id="@+id/destination"
+            style="@style/InfoCardValue"
+            tools:text="Destination" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/InfoCardContainer">
+
+        <TextView
+            style="@style/InfoCardLabel"
+            android:text="Draft: " />
+
+        <TextView
+            android:id="@+id/draft"
+            style="@style/InfoCardValue"
+            tools:text="Draft" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/InfoCardContainer">
+
+        <TextView
+            style="@style/InfoCardLabel"
+            android:text="Eta:" />
+
+        <TextView
+            android:id="@+id/eta"
+            style="@style/InfoCardValue"
+            tools:text="Eta" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/InfoCardContainer">
+
+        <TextView
+            style="@style/InfoCardLabel"
+            android:text="Heading: " />
+
+        <TextView
+            android:id="@+id/heading"
+            style="@style/InfoCardValue"
+            tools:text="Heading" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/InfoCardContainer">
+
+        <TextView
+            style="@style/InfoCardLabel"
+            android:text="Lat: " />
+
+        <TextView
+            android:id="@+id/lat"
+            style="@style/InfoCardValue"
+            tools:text="Lat" />
+
+        <TextView
+            style="@style/InfoCardLabel"
+            android:text=" Lng: " />
+
+
+        <TextView
+            android:id="@+id/lng"
+            style="@style/InfoCardValue"
+            tools:text="Lng" />
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/InfoCardContainer">
+
+        <TextView
+            style="@style/InfoCardLabel"
+            android:text="Length: " />
+
+        <TextView
+            android:id="@+id/length"
+            style="@style/InfoCardValue"
+            tools:text="Length" />
+
+        <TextView
+            style="@style/InfoCardLabel"
+
+            android:text=" Width: " />
+
+        <TextView
+            android:id="@+id/width"
+            style="@style/ValueStyle"
+            tools:text="Width" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/link"
+        style="@style/InfoCardValue"
+        tools:text="Link" />
+
+    <TextView
+        android:id="@+id/route"
+        style="@style/InfoCardValue"
+        tools:text="Route"
+
+        />
+
+    <TextView
+        android:id="@+id/picture"
+        style="@style/InfoCardValue"
+        tools:text="Picture" />
+
+    <TextView
+        android:id="@+id/speed"
+        style="@style/InfoCardValue"
+        tools:text="Speed" />
+
+    <TextView
+        android:id="@+id/type"
+        style="@style/InfoCardValue"
+        tools:text="Type" />
+
+    <TextView
+        android:id="@+id/course"
+        style="@style/InfoCardValue"
+        tools:text="Course" />
+
+    <TextView
+        android:id="@+id/name"
+        style="@style/InfoCardValue"
+
+        tools:text="Name" />
+
+    <LinearLayout style="@style/InfoCardContainer">
+
+        <TextView
+            style="@style/InfoCardLabel"
+
+            android:text="Status: " />
+
+        <TextView
+            android:id="@+id/status"
+            style="@style/InfoCardValue"
+            tools:text="@string/status_label" />
+    </LinearLayout>
 
 </LinearLayout>

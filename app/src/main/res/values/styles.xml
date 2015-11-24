@@ -64,4 +64,25 @@
     <style name="BoatFooter">
         <item name="android:layout_margin">8dp</item>
     </style>
+
+    <style name="InfoCardContainer">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="InfoCardLabel">
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+
+    </style>
+
+    <style name="InfoCardValue">
+        <item name="android:textSize">?android:textAppearanceSmall</item>
+        <item name="android:textColor">#FF0000</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 </resources>
