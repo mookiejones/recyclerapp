@@ -31,6 +31,7 @@
                 android:contentDescription="@string/BoatImageDescription"
                 android:scaleType="fitXY"
 
+
                 tools:src="@drawable/boat_sample" />
 
 
@@ -120,10 +121,7 @@
             android:layout_width="match_parent"
             android:layout_height="28dp"
             android:layout_margin="4dp">
-
             <include layout="@layout/boat_card_footer" />
-
-
         </LinearLayout>
     </LinearLayout>
 

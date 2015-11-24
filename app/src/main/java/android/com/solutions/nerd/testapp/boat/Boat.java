@@ -103,7 +103,8 @@ public class Boat {
                 JSONArray imageArray = boat.getJSONArray(TAG_IMAGES);
                 List<String> tmpImages = new ArrayList<>();
                 for (int i = 0; i < imageArray.length(); i++) {
-                    String img = imageArray.get(i).toString();
+                    String img = Global.api_image_path+imageArray.get(i).toString()+".jpg";
+
                     tmpImages.add(img);
                 }
                 images = tmpImages.toArray(new String[tmpImages.size()]);
@@ -199,7 +200,6 @@ public class Boat {
                 searchString += "%20" + title;
 
             new ImageListParser().execute(searchString);
-
 
         } catch (JSONException e1) {
             e1.printStackTrace();
@@ -449,9 +449,17 @@ public class Boat {
 
 
             List<String> strings = new ArrayList<>();
-            if (result.size() > 0)
+            if (result.size() > 0){
                 strings = result;
-            setImages(result);
+
+                if (images!=null&&images.length>0) {
+                    for (String s : images) {
+                        strings.add(s);
+                    }
+                }
+            }
+
+          //  setImages(strings);
         }
 
         private String readStream(InputStream stream) {

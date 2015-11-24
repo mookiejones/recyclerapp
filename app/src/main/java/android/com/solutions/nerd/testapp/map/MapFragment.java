@@ -146,7 +146,7 @@ public class MapFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (mMap == null) {
-            setupMapIfNeeded();
+            setupMapIfNeeded(savedInstanceState);
         }
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getBaseContext());
@@ -163,7 +163,7 @@ public class MapFragment extends Fragment
 
 
         if (mMap == null) {
-            setupMapIfNeeded();
+            setupMapIfNeeded(savedInstanceState);
         }
         setHasOptionsMenu(true);
 
@@ -212,7 +212,7 @@ public class MapFragment extends Fragment
         updateMarkers();
     }
 
-    private void setupMapIfNeeded() {
+    private void setupMapIfNeeded(final Bundle savedInstanceState) {
         if (mMap != null) {
             return;
         }
@@ -229,6 +229,22 @@ public class MapFragment extends Fragment
 
         // Disable Buttons
 
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                if (marker.getId() != null && mMarkers != null && mMarkers.size() > 0) {
+
+                }
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                View v=getLayoutInflater(savedInstanceState).inflate(R.layout.map_info_window,null);
+                return v;
+
+            }
+        });
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
@@ -610,8 +626,15 @@ public class MapFragment extends Fragment
         protected void onPostExecute(List<Ship> ships) {
             mMap.clear();
             for (Ship ship : ships) {
-                MarkerOptions marker = new MarkerOptions().position(ship.getLocation());
+                MarkerOptions marker = new MarkerOptions()
+                        .title(ship.getName())
+                        .snippet(ship.getCallsign())
+
+                        .position(ship.getLocation());
                 marker.snippet(ship.getName());
+
+
+
                 mMap.addMarker(marker);
             }
         }

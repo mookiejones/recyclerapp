@@ -20,11 +20,14 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
+
+import it.sephiroth.android.library.widget.ExpandableHListView;
 
 /**
  * Created by mookie on 10/29/15.
@@ -121,7 +124,8 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
 
         if (img != null && !img.isEmpty()) {
             String urlString = Global.api_image_path+img+".jpg";
-            customBoatHolder.boatImage.setImageUrl(urlString);
+            Log.i(TAG,"image is "+urlString);
+            customBoatHolder.boatImage.setImageUrl(img);
         }
 
 
@@ -390,6 +394,7 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
         implements View.OnCreateContextMenuListener, View.OnTouchListener{
 
 
+        protected ExpandableHListView boatImageList;
         protected PicassoImage boatImage;
         protected TextView designerText;
         protected TextView titleText;
@@ -502,6 +507,8 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
             shareView = (ImageView) itemView.findViewById(R.id.shareLink);
 
 
+            this.boatImageList=(ExpandableHListView)itemView.findViewById(R.id.list);
+
             this.boatYears = (TextView) itemView.findViewById(R.id.yearText);
             this.titleText = (TextView) itemView.findViewById(R.id.title);
             this.boatImage = (PicassoImage) itemView.findViewById(R.id.boatThumbnail);
@@ -517,10 +524,19 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
 
 
             this.boatFront=(LinearLayout)itemView.findViewById(R.id.boatFront);
-//            boatImage.setOnTouchListener(this);
+            boatImage.setOnTouchListener(this);
             itemView.setOnTouchListener(this);
 
             itemView.setMinimumWidth(width);
+            int footer_width=width/5 ;
+            int w=footer_width/5-(boatView.getWidth()/2);
+/*            boatView.setPadding(w,8,8,w);
+            plusOneView.setPadding(w,8,8,footer_width);
+            favoriteView.setPadding(w,8,8,w);
+            editView.setPadding(w,8,8,w);
+            shareView.setPadding(w,8,8,w);*/
+
+
 
 
             this.boatLength=(TextView)itemView.findViewById(R.id.loa);
@@ -708,7 +724,8 @@ public class BoatArrayAdapter extends RecyclerView.Adapter<BoatArrayAdapter.Cust
                     initialX=event.getX();
                     return true;
                 case MotionEvent.ACTION_UP:
-                    LinearLayout more = (LinearLayout) v.findViewById(R.id.main_content);
+                    LinearLayout more=(LinearLayout)itemView.findViewById(R.id.main_content);
+
                     more.setVisibility(more.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
 
 
