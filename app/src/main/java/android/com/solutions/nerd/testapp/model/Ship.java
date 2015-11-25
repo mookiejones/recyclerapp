@@ -111,8 +111,10 @@ public class Ship {
             if (json.has(TYPE))
                 type = json.getString(TYPE);
 
-            if (json.has(ROUTE))
+            if (json.has(ROUTE)){
                 route = json.getString(ROUTE);
+                parseRoute();
+            }
 
             if (json.has(PICTURE))
                 picture = json.getString(PICTURE);
@@ -124,29 +126,36 @@ public class Ship {
         }
     }
 
+    private LatLng[] mRoutePoints;
 
-    public List<LatLng> getRoutePoints(){
+    public void parseRoute(){
+
+        mRoutePoints = setRoutePoints();
+        Log.d(TAG,"Set route points");
+    }
+    public LatLng[] getRoutePoints(){return mRoutePoints;}
+    private LatLng[] setRoutePoints(){
         if (route.isEmpty())
             return null;
-
         List<LatLng> result= new ArrayList<>();
         String[] splitRoute=route.split(",");
         for(String s:splitRoute){
             String[] routePath=s.split(" ");
-        Log.d(TAG,"splitThe Route");
+            try {
             String lat = routePath[0];
             String lng = routePath[1];
-            double dLat=Double.parseDouble(lat);
-            double dLng=Double.parseDouble(lng);
-            result.add(new LatLng(dLat,dLng));
 
-
+                double dLat = Double.parseDouble(lat);
+                double dLng = Double.parseDouble(lng);
+                result.add(new LatLng(dLat,dLng));
+            }catch(Exception ex){
+                Log.d(TAG,ex.getMessage());
+            }
         }
 
 
-        return result;
 
-
+        return  result.toArray(new LatLng[result.size()]);
     }
     public String getId() {
         return id;
@@ -303,6 +312,7 @@ public class Ship {
     public void setLink(String link) {
         this.link = link;
     }
+
 
     public LatLng getLocation() {
         double _lat = lat;
