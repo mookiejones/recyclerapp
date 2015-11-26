@@ -18,8 +18,6 @@ import java.util.List;
  */
 public class Ship {
 
-    private static final String TAG= LogUtils.getLogTag(Ship.class);
-
     public static final String MMSI = "mmsi";
     public static final String LAT = "lat";
     public static final String LNG = "lng";
@@ -39,6 +37,7 @@ public class Ship {
     public static final String ROUTE = "route";
     public static final String PICTURE = "picture";
     public static final String LINK = "link";
+    private static final String TAG = LogUtils.getLogTag(Ship.class);
     private String id = "";
     private String mmsi = "";
     private double lat;
@@ -59,7 +58,7 @@ public class Ship {
     private String route = "";
     private String picture = "";
     private String link = "";
-
+    private LatLng[] mRoutePoints;
 
     public Ship(JSONObject json) {
         try {
@@ -126,8 +125,6 @@ public class Ship {
         }
     }
 
-    private LatLng[] mRoutePoints;
-
     public void parseRoute(){
 
         mRoutePoints = setRoutePoints();
@@ -159,6 +156,10 @@ public class Ship {
     }
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMmsi() {

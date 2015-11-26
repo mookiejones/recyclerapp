@@ -18,7 +18,6 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -30,7 +29,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v7.widget.ListViewCompat;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Config;
@@ -41,7 +39,6 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -50,7 +47,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -58,18 +55,18 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
-
-import org.lucasr.twowayview.TwoWayView;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 
+import it.sephiroth.android.library.widget.HListView;
+
 
 public class MapFragment extends Fragment
         implements
-        GoogleMap.OnMapClickListener,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMarkerDragListener,
         GoogleMap.OnCameraChangeListener,
@@ -77,26 +74,26 @@ public class MapFragment extends Fragment
         ShipQueryAsyncTask.OnShipQueryCompleteListener,
         LocationListener,
         GoogleMap.OnInfoWindowClickListener {
-    private TwoWayView mShipList;
     private static final String TAG = MapFragment.class.getSimpleName();
     private static final String tileUrl = "http://earthncseamless.s3.amazonaws.com/{zoom}/{x}/{y}.png";
     private final static LatLng dearborn = new LatLng(42.3222600f, -83.1763100f);
+    protected static List<Ship> mShips = new ArrayList<>();
     private static MapFragment mInstance;
     private static View view;
+    private static ShipQueryAsyncTask task;
     private final List<Marker> mTags = new ArrayList<>();
-    private final List<Marker> mMarkers = new ArrayList<>();
+    private final List<MarkerOptions> mMarkers = new ArrayList<>();
     //   private Firebase mFirebaseJourneys;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     private final int mDistance = 100;
-  protected static List<Ship> mShips= new ArrayList<>();
+    SlidingUpPanelLayout mPanelLayout;
+    private HListView mShipList;
 //    protected static HashMap<String, Ship> mShips = new HashMap<>();
     // ===========================================================
     // Fields
     // ===========================================================
     private SharedPreferences mPrefs;
-
     private FloatingActionButton mDeleteButtoon;
-
     private Menu mFloatingMenu;
     private GoogleMap mMap;
     @SuppressWarnings("UnusedDeclaration")
@@ -104,10 +101,11 @@ public class MapFragment extends Fragment
     @SuppressWarnings("UnusedDeclaration")
     private Dictionary<String, TagInfo> mMarkerDict;
     private Polyline mRouteLine;
-    private Marker selectedMarker;
+    private MarkerOptions selectedMarker;
     private LatLng mSelectedLatLng;
     private LocationManager locationManager;
     private String provider;
+    private boolean updating_ships = false;
 
     public static MapFragment getInstance() {
         if (mInstance == null)
@@ -125,8 +123,6 @@ public class MapFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-
-
     }
 
     /**
@@ -146,21 +142,34 @@ public class MapFragment extends Fragment
             setupMapIfNeeded(savedInstanceState);
         }
 
+
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getBaseContext());
 
 
-        mShipList = (TwoWayView)view.findViewById(R.id.shipList);
+        mShipList = (HListView) view.findViewById(R.id.shipList);
+        mShipList.setOnItemClickListener(new it.sephiroth.android.library.widget.AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(it.sephiroth.android.library.widget.AdapterView<?> adapterView, View view, int i, long l) {
+                Ship ship = mShips.get(i);
+                MarkerOptions m = findMarker(ship.getMmsi());
+                CameraPosition cp = new CameraPosition(ship.getLocation(), 18, 0, Float.parseFloat(ship.getHeading()));
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
 
-      mShipList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-          @Override
-          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-              Log.d(TAG,"ListViewItem Clicked");
-              Ship ship = (Ship)parent.getAdapter().getItem(position);
-              CameraPosition cp = new CameraPosition(ship.getLocation(),18,0,Float.parseFloat(ship.getHeading()));
-              mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
+                if (m != null) {
 
-          }
-      });
+                    m.alpha(99);
+                    if (selectedMarker != null) {
+                        selectedMarker.alpha(1);
+                        selectedMarker = m;
+
+
+                    }
+                }
+            }
+        });
+
+
+
 
          view.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -179,6 +188,22 @@ public class MapFragment extends Fragment
 
     }
 
+    public MarkerOptions findMarker(String mmsi) {
+        MarkerOptions result = null;
+
+
+        for (MarkerOptions m : mMarkers) {
+            String mMmsi = m.getSnippet();
+
+            if (mmsi == mMmsi) {
+                result = m;
+                break;
+            }
+
+        }
+        return result;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,8 +211,6 @@ public class MapFragment extends Fragment
         // retain this fragment
         setRetainInstance(true);
     }
-
-
 
     /**
      * Called to have the fragment instantiate its user interface view.
@@ -220,17 +243,17 @@ public class MapFragment extends Fragment
         } catch (InflateException e) {
             Log.e(TAG, e.getMessage());
         }
+
         return view;
 
 
 
     }
 
-
-    private boolean updating_ships=false;
-    private static ShipQueryAsyncTask task;
     @Override
     public void onCameraChange(CameraPosition cameraPosition){
+        if (cameraPosition.zoom > 15)
+            return;
         if (updating_ships){
             task.cancel(true);
             updating_ships=false;
@@ -244,11 +267,7 @@ public class MapFragment extends Fragment
     }
 
 
-    @Override
-    public void onMapClick(LatLng latLng) {
-        mSelectedLatLng = latLng;
-        updateMarkers();
-    }
+
 
     private void setupMapIfNeeded(final Bundle savedInstanceState) {
         if (mMap != null) {
@@ -256,9 +275,11 @@ public class MapFragment extends Fragment
         }
 
 
+
         mMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
+
+
         mMap.setOnCameraChangeListener(this);
-        mMap.setOnMarkerDragListener(this);
         mMap.setOnMarkerClickListener(this);
 
 
@@ -270,13 +291,14 @@ public class MapFragment extends Fragment
                 return null;
             }
 
-            private Ship getShip(String mmsi){
-                for(Ship ship:mShips){
-                    if(ship.getMmsi().equals(mmsi))
+            private Ship getShip(String mmsi) {
+                for (Ship ship : mShips) {
+                    if (ship.getMmsi().equals(mmsi))
                         return ship;
                 }
                 return null;
             }
+
             @Override
             public View getInfoContents(Marker marker) {
 
@@ -286,8 +308,7 @@ public class MapFragment extends Fragment
                 String id = marker.getId();
                 String snippet = marker.getSnippet();
 
-                 final Ship mShip =getShip(snippet);
-
+                final Ship mShip = getShip(snippet);
 
 
                 ((TextView) v.findViewById(R.id.info_title)).setText(marker.getTitle());
@@ -301,7 +322,7 @@ public class MapFragment extends Fragment
                 //          ((TextView)v.findViewById(R.id.course)).setText(mShip.getCourse());
                 ((TextView) v.findViewById(R.id.heading)).setText(mShip.getHeading());
                 ((TextView) v.findViewById(R.id.length)).setText(mShip.getLength());
-                final TextView linkView = (TextView)v.findViewById(R.id.link);
+                final TextView linkView = (TextView) v.findViewById(R.id.link);
                 linkView.setText(Html.fromHtml("<a href=\"" + mShip.getLink() + "\">More</a>"));
                 linkView.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -314,44 +335,25 @@ public class MapFragment extends Fragment
                             .load(mShip.getPicture())
                             .into(img);
                 }
-                String route = mShip.getRoute();
-
-                ((TextView) v.findViewById(R.id.route)).setText(route);
-
-
-
 
                 ((TextView) v.findViewById(R.id.status)).setText(mShip.getStatus());
                 ((TextView) v.findViewById(R.id.type)).setText(mShip.getType());
                 ((TextView) v.findViewById(R.id.width)).setText(mShip.getWidth());
-
-                ((FloatingActionButton) v.findViewById(R.id.boat_more)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (mShip.getLink().isEmpty())
-                            return;
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-
-                        intent.setData(Uri.parse(mShip.getLink()));
-                        startActivity(intent);
-
-
-                    }
-                });
-
-                //Width
-
                 return v;
 
 
             }
         });
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setContentDescription("Content Description");
+
+
         mMap.setBuildingsEnabled(false);
+
+        UiSettings settings = mMap.getUiSettings();
         mMap.setIndoorEnabled(false);
 
 
@@ -365,11 +367,6 @@ public class MapFragment extends Fragment
             mMap.moveCamera(cu);
 
         }
-
-
-
-        /* Get Current Click Location */
-        mMap.setOnMapClickListener(this);
 
 
         // Setup Long Click
@@ -394,7 +391,10 @@ public class MapFragment extends Fragment
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        selectedMarker = marker;
+        int id = Integer.parseInt(marker.getId().substring(1));
+        selectedMarker = mMarkers.get(id);
+
+
         if (selectedMarker != null) {
 //                    removeButton.setVisibility(View.VISIBLE);
         }
@@ -671,6 +671,8 @@ public class MapFragment extends Fragment
 
         mMap.clear();
 
+        mShips = ships;
+        mMarkers.clear();
 
         for (Ship ship : ships) {
             final LatLng[] points =  ship.getRoutePoints();
@@ -685,18 +687,20 @@ public class MapFragment extends Fragment
 
             }
 
-            MarkerOptions marker = new MarkerOptions()
 
+            MarkerOptions marker = new MarkerOptions()
                     .title(ship.getName())
                     .snippet(ship.getMmsi())
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+
+//                    .icon(BitmapDescriptorFactory.fromBitmap(icon))
                     .position(ship.getLocation());
 
-
+            mMarkers.add(marker);
             mMap.addMarker(marker);
         }
         final Ship[] shipList = mShips.toArray(new Ship[mShips.size()]);
         final ListAdapter adapter = new ShipAdapter(getContext(),shipList);
         mShipList.setAdapter(adapter);
     }
+
 }
