@@ -7,6 +7,7 @@ import android.com.solutions.nerd.testapp.R;
 import android.com.solutions.nerd.testapp.boat.BoatActivity;
 import android.com.solutions.nerd.testapp.boat.BoatFragment;
 import android.com.solutions.nerd.testapp.camera.CameraFragment;
+import android.com.solutions.nerd.testapp.helpers.OnUpdateTimerListener;
 import android.com.solutions.nerd.testapp.main.MainFragment;
 import android.com.solutions.nerd.testapp.map.MapFragment;
 import android.com.solutions.nerd.testapp.message.GcmRegistrationAsyncTask;
@@ -33,7 +34,10 @@ import android.widget.SearchView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by mookie on 11/3/15.
@@ -41,6 +45,10 @@ import java.util.List;
  */
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Timer mUpdateTimer;
+    private TimerTask mUpdateTimerTask;
+
 
     private static final String TAG= LogUtils.getLogTag(BaseActivity.class);
     private ITextQueryListener mTextQueryListener;
@@ -53,6 +61,13 @@ public class BaseActivity extends AppCompatActivity
         mTextQueryListener = listener;
     }
 
+
+    private List<OnUpdateTimerListener> mTimerListeners= new ArrayList<>();
+
+    private void updateTimerItems(){
+        for(OnUpdateTimerListener listener:mTimerListeners)
+            listener.updateTimerItem();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +85,7 @@ public class BaseActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        startTimer();
         // Set Initial fragment
         getSupportFragmentManager()
                 .beginTransaction()
@@ -77,10 +93,26 @@ public class BaseActivity extends AppCompatActivity
                 .commit();
 
 
+
+
         new GcmRegistrationAsyncTask(getApplicationContext()).execute();
 
     }
 
+    private void startTimer(){
+        // Set a new Timer
+        mUpdateTimer= new Timer("UpdateTimer");
+
+        // Initialize the timer
+        mUpdateTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                updateTimerItems();
+            }
+        };
+
+        mUpdateTimer.schedule(mUpdateTimerTask,500,60000);
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -171,13 +203,6 @@ public class BaseActivity extends AppCompatActivity
 //            return true;
 
             fragment = BoatFragment.getInstance();
-        } else if (id == R.id.nav_camera) {
-            fragment = CameraFragment.getInstance();
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-            fragment = MainFragment.getInstance();
-        } else if (id == R.id.nav_slideshow) {
-
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
@@ -189,6 +214,7 @@ public class BaseActivity extends AppCompatActivity
 //            setContentView(R.layout.activity_maps);
 
             fragment = MapFragment.getInstance();
+            mTimerListeners.add((MapFragment)fragment);
 
 
 

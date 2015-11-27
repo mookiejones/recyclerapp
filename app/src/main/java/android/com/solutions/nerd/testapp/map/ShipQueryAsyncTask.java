@@ -1,6 +1,7 @@
 package android.com.solutions.nerd.testapp.map;
 
 import android.com.solutions.nerd.testapp.model.Ship;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -64,9 +65,15 @@ public class ShipQueryAsyncTask extends AsyncTask<LatLngBounds, Void, List<Ship>
                         return result;
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     Ship ship = new Ship(jsonObject);
-                    if (bound.contains(ship.getLocation())) {
-                        result.add(ship);
+                    if (!ship.getPicture().isEmpty()){
+                        URL img_url = new URL(ship.getPicture());
+                        HttpURLConnection imageConnection=(HttpURLConnection)img_url.openConnection();
+                        InputStream imageStream=imageConnection.getInputStream();
+                        ship.setImage(BitmapFactory.decodeStream(imageStream));
                     }
+
+                        result.add(ship);
+
 
                 }
 

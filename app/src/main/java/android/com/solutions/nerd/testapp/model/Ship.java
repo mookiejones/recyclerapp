@@ -1,6 +1,10 @@
 package android.com.solutions.nerd.testapp.model;
 
 import android.com.solutions.nerd.testapp.utils.LogUtils;
+import android.content.ContentValues;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -9,6 +13,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,26 +30,31 @@ import java.util.List;
  * for Nerd.Solutions
  */
 public class Ship {
+    public static final String TABLENAME="ships";
 
-    public static final String MMSI = "mmsi";
-    public static final String LAT = "lat";
-    public static final String LNG = "lng";
-    public static final String SPEED = "speed";
-    public static final String LENGTH = "length";
-    public static final String WIDTH = "width";
-    public static final String DRAFT = "draft";
-    public static final String NAME = "name";
     public static final String CALLSIGN = "callsign";
-    public static final String DESTINATION = "destination";
-    public static final String ETA = "eta";
-    public static final String IMO = "imo";
-    public static final String HEADING = "heading";
     public static final String COURSE = "course";
+    public static final String DESTINATION = "destination";
+    public static final String DRAFT = "draft";
+    public static final String ETA = "eta";
+    public static final String HEADING = "heading";
+    public static final String IMAGE="image";
+    public static final String IMO = "imo";
+    public static final String LAT = "lat";
+    public static final String LENGTH = "length";
+    public static final String LINK = "link";
+    public static final String LNG = "lng";
+    public static final String MMSI = "mmsi";
+    public static final String NAME = "name";
+    public static final String PICTURE = "picture";
+    public static final String ROUTE = "route";
+    public static final String SPEED = "speed";
     public static final String STATUS = "status";
     public static final String TYPE = "type";
-    public static final String ROUTE = "route";
-    public static final String PICTURE = "picture";
-    public static final String LINK = "link";
+    public static final String WIDTH = "width";
+
+
+
     private static final String TAG = LogUtils.getLogTag(Ship.class);
     private String id = "";
     private String mmsi = "";
@@ -59,6 +77,12 @@ public class Ship {
     private String picture = "";
     private String link = "";
     private LatLng[] mRoutePoints;
+    private Bitmap mImage;
+
+
+    public Ship(){
+
+    }
 
     public Ship(JSONObject json) {
         try {
@@ -115,8 +139,12 @@ public class Ship {
                 parseRoute();
             }
 
-            if (json.has(PICTURE))
+
+
+            if (json.has(PICTURE)) {
                 picture = json.getString(PICTURE);
+
+            }
 
             if (json.has(LINK))
                 link = json.getString(LINK);
@@ -149,11 +177,14 @@ public class Ship {
                 Log.d(TAG,ex.getMessage());
             }
         }
-
-
-
         return  result.toArray(new LatLng[result.size()]);
     }
+
+    public Bitmap getImage(){
+        return mImage;
+    }
+    public void setImage(Bitmap bitmap){mImage=bitmap;}
+
     public String getId() {
         return id;
     }
@@ -333,6 +364,44 @@ public class Ship {
 //		marker.icon(BitmapDescriptorFactory.fromBitmap(UrlImageViewHelper.getCachedBitmap(picture)));
 
         return marker;
+    }
+
+
+    public static ContentValues getContentValues(Ship ship){
+        ContentValues values = new ContentValues();
+
+        values.put(CALLSIGN,ship.getCallsign());
+        values.put(COURSE,ship.getCourse());
+        values.put(DESTINATION,ship.getDestination());
+        values.put(DRAFT,ship.getDraft());
+        values.put(ETA,ship.getEta());
+        values.put(HEADING,ship.getHeading());
+        values.put(IMO,ship.getImo());
+        values.put(LAT,ship.getLat());
+        values.put(LENGTH,ship.getLength());
+        values.put(LINK,ship.getLink());
+        values.put(LNG,ship.getLng());
+        values.put(MMSI,ship.getMmsi());
+        values.put(NAME,ship.getName());
+
+        if (ship.getImage()!=null)
+            values.put(IMAGE,getBlob(ship.getImage()));
+        values.put(PICTURE,ship.getPicture());
+        values.put(ROUTE,ship.getRoute());
+        values.put(SPEED,ship.getSpeed());
+        values.put(STATUS,ship.getStatus());
+        values.put(TYPE,ship.getType());
+        values.put(WIDTH,ship.getWidth());
+        return values;
+    }
+
+    private static byte[] getBlob(Bitmap bmp){
+
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 
 }

@@ -4,16 +4,25 @@ import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.com.solutions.nerd.testapp.R;
+import android.com.solutions.nerd.testapp.db.ShipCursorWrapper;
+import android.com.solutions.nerd.testapp.db.ShipDatabase;
+import android.com.solutions.nerd.testapp.helpers.OnUpdateTimerListener;
 import android.com.solutions.nerd.testapp.main.MainActivity;
 import android.com.solutions.nerd.testapp.model.Ship;
 import android.com.solutions.nerd.testapp.model.TagInfo;
 import android.com.solutions.nerd.testapp.utils.PrefUtils;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -46,8 +55,10 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -67,6 +78,7 @@ import it.sephiroth.android.library.widget.HListView;
 
 public class MapFragment extends Fragment
         implements
+        OnUpdateTimerListener,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMarkerDragListener,
         GoogleMap.OnCameraChangeListener,
@@ -77,6 +89,8 @@ public class MapFragment extends Fragment
     private static final String TAG = MapFragment.class.getSimpleName();
     private static final String tileUrl = "http://earthncseamless.s3.amazonaws.com/{zoom}/{x}/{y}.png";
     private final static LatLng dearborn = new LatLng(42.3222600f, -83.1763100f);
+
+    private SQLiteDatabase mDatabase;
     protected static List<Ship> mShips = new ArrayList<>();
     private static MapFragment mInstance;
     private static View view;
@@ -115,8 +129,6 @@ public class MapFragment extends Fragment
 
     @Override
     public void onPause() {
-
-
         super.onPause();
     }
 
@@ -174,7 +186,7 @@ public class MapFragment extends Fragment
          view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                updateMarkers();
+//                updateMarkers();
 
                 return false;
             }
@@ -204,12 +216,20 @@ public class MapFragment extends Fragment
         return result;
     }
 
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         // retain this fragment
         setRetainInstance(true);
+
+        Context mContext=getContext();
+        mDatabase=new ShipDatabase(mContext).getWritableDatabase();
+        mShips=new ArrayList<>();
+
     }
 
     /**
@@ -255,19 +275,17 @@ public class MapFragment extends Fragment
         if (cameraPosition.zoom > 15)
             return;
         if (updating_ships){
-            task.cancel(true);
+//            task.cancel(true);
             updating_ships=false;
         }
+        updateMarkers();
         updating_ships=true;
-         LatLngBounds bnd = mMap.getProjection().getVisibleRegion().latLngBounds;
+//         LatLngBounds bnd = mMap.getProjection().getVisibleRegion().latLngBounds;
 
-        task =   new ShipQueryAsyncTask(this);
-        task.execute(bnd);
+//        task =   new ShipQueryAsyncTask(this);
+//        task.execute(bnd);
      //   updateMarkers();
     }
-
-
-
 
     private void setupMapIfNeeded(final Bundle savedInstanceState) {
         if (mMap != null) {
@@ -383,6 +401,9 @@ public class MapFragment extends Fragment
             }
         });
 
+        LatLngBounds bnd = mMap.getProjection().getVisibleRegion().latLngBounds;
+        new ShipQueryAsyncTask(this).execute(bnd);
+
     }
 
     private void updatePath() {
@@ -406,12 +427,6 @@ public class MapFragment extends Fragment
         return true;
     }
 
-    private void updateMarkers() {
-        LatLngBounds bnd = mMap.getProjection().getVisibleRegion().latLngBounds;
-        task = new ShipQueryAsyncTask(this);
-
-        task.execute(bnd);
-    }
 
     /**
      * Called when a shared preference is changed, added, or removed. This
@@ -452,6 +467,8 @@ public class MapFragment extends Fragment
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
+
+        Log.d(TAG,"OnStatusChanged provider:"+provider+" status:"+String.valueOf(status));
     }
 
     /**
@@ -462,6 +479,7 @@ public class MapFragment extends Fragment
      */
     @Override
     public void onProviderEnabled(String provider) {
+        Log.d(TAG,"onProviderEnabled provider:"+provider);
 
     }
 
@@ -475,7 +493,7 @@ public class MapFragment extends Fragment
      */
     @Override
     public void onProviderDisabled(String provider) {
-
+        Log.d(TAG,"onProviderDisabled provider:"+provider);
     }
 
     private LatLng getCurrentLocation() {
@@ -666,41 +684,169 @@ public class MapFragment extends Fragment
         updatePath();
     }
 
-    @Override
-    public void QueryComplete(List<Ship> ships) {
 
+
+
+    private void updateMarkers() {
+        final int size =(int)(50*getResources().getDisplayMetrics().density);
         mMap.clear();
+        LatLngBounds bnd = mMap.getProjection().getVisibleRegion().latLngBounds;
 
-        mShips = ships;
-        mMarkers.clear();
-
-        for (Ship ship : ships) {
+        for(Ship ship:ShipDatabase.getShips(bnd)){
             final LatLng[] points =  ship.getRoutePoints();
 
             for(LatLng latLng:ship.getRoutePoints()){
                 // Add a thin red line from London to New York.
                 Polyline line = mMap.addPolyline(new PolylineOptions()
                         .add(points)
-                        .width(5)
+                        .width(3)
                         .color(Color.RED));
-
-
             }
-
-
+            Bitmap boatImage = ship.getImage();
             MarkerOptions marker = new MarkerOptions()
                     .title(ship.getName())
                     .snippet(ship.getMmsi())
-
-//                    .icon(BitmapDescriptorFactory.fromBitmap(icon))
                     .position(ship.getLocation());
+
+
+
+            if (boatImage!=null){
+
+
+                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+
+                Bitmap bmp = Bitmap.createBitmap(size, size, conf);
+
+                Bitmap shipImage = Bitmap.createScaledBitmap(ship.getImage(),size,size,false);
+
+                Canvas c = new Canvas(bmp);
+
+
+                // paint defines the text color,
+                // stroke width, size
+                Paint color = new Paint();
+                color.setTextSize(15);
+                color.setColor(Color.BLACK);
+
+                c.drawBitmap(shipImage, 0, 0, color);
+
+                if (!boatImage.isRecycled())
+                    boatImage.recycle();
+
+                // Need to get Correct Location for Text;
+                float textWidth=color.measureText(ship.getName());
+                float center = (size-textWidth)/2;
+
+
+
+                c.drawText(ship.getName(), center, 40, color);
+
+                marker.icon(BitmapDescriptorFactory.fromBitmap(bmp));
+                marker.anchor(0.5f, 1);
+            }
+
+
+
+
+            mMarkers.add(marker);
+            mMap.addMarker(marker);
+
+        }
+
+
+        /*
+
+        for (Ship ship:mShips) {
+            if (!bnd.contains(ship.getLocation()))
+                continue;
+
+            final LatLng[] points = ship.getRoutePoints();
+
+            for (LatLng latLng : ship.getRoutePoints()) {
+                // Add a thin red line from London to New York.
+                Polyline line = mMap.addPolyline(new PolylineOptions()
+                        .add(points)
+                        .width(3)
+                        .color(Color.RED));
+            }
+
+            Bitmap boatImage = ship.getImage();
+            MarkerOptions marker = new MarkerOptions()
+                    .title(ship.getName())
+                    .snippet(ship.getMmsi())
+                    .position(ship.getLocation());
+
+
+            if (boatImage != null) {
+
+
+                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+
+                Bitmap bmp = Bitmap.createBitmap(size, size, conf);
+
+                Bitmap shipImage = Bitmap.createScaledBitmap(ship.getImage(), size, size, false);
+
+                Canvas c = new Canvas(bmp);
+
+
+                // paint defines the text color,
+                // stroke width, size
+                Paint color = new Paint();
+                color.setTextSize(15);
+                color.setColor(Color.BLACK);
+
+                c.drawBitmap(shipImage, 0, 0, color);
+
+                if (!boatImage.isRecycled())
+                    boatImage.recycle();
+
+                // Need to get Correct Location for Text;
+                float textWidth = color.measureText(ship.getName());
+                float center = (size - textWidth) / 2;
+
+
+                c.drawText(ship.getName(), center, 40, color);
+
+                marker.icon(BitmapDescriptorFactory.fromBitmap(bmp));
+                marker.anchor(0.5f, 1);
+            }
+
 
             mMarkers.add(marker);
             mMap.addMarker(marker);
         }
+        */
+    }
+
+
+
+    @Override
+    public void QueryComplete(List<Ship> ships) {
+        for(Ship ship:ships){
+            ShipDatabase.addShip(ship);
+        }
+        mShips = ships;
+
+
+        updateMarkers();
         final Ship[] shipList = mShips.toArray(new Ship[mShips.size()]);
         final ListAdapter adapter = new ShipAdapter(getContext(),shipList);
         mShipList.setAdapter(adapter);
     }
 
+
+
+    @Override
+    public void updateTimerItem() {
+
+//        if (mMap.getProjection()!=null&&mMap.getProjection().getVisibleRegion()!=null){
+//            LatLngBounds bnd = mMap.getProjection().getVisibleRegion().latLngBounds;
+
+  //          task =   new ShipQueryAsyncTask(this);
+ //           task.execute(bnd);
+//        }
+
+
+
+    }
 }

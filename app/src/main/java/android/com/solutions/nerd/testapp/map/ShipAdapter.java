@@ -3,6 +3,7 @@ package android.com.solutions.nerd.testapp.map;
 import android.com.solutions.nerd.testapp.R;
 import android.com.solutions.nerd.testapp.model.Ship;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,6 @@ public class ShipAdapter extends ArrayAdapter<Ship> {
         this.values = values;
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Ship ship = values[position];
@@ -33,8 +33,11 @@ public class ShipAdapter extends ArrayAdapter<Ship> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.list_item, parent, false);
 
-        final ImageView img = (ImageView) rowView.findViewById(R.id.boatListImage);
-        Picasso.with(getContext()).load(ship.getPicture()).into(img);
+        if (ship.getImage()!=null) {
+            final ImageView img = (ImageView) rowView.findViewById(R.id.boatListImage);
+            img.setImageBitmap(ship.getImage());
+        }
+
         TextView textView = (TextView) rowView.findViewById(R.id.lblListItem);
 
         textView.setText(ship.getName());
