@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tile_url">http://earthncseamless.s3.amazonaws.com/{zoom}/{x}/{y}.png</string>
+</resources>

@@ -32,6 +32,7 @@ import java.util.List;
 public class Ship {
     public static final String TABLENAME="ships";
 
+    public static final String ID="id";
     public static final String CALLSIGN = "callsign";
     public static final String COURSE = "course";
     public static final String DESTINATION = "destination";
@@ -86,6 +87,10 @@ public class Ship {
 
     public Ship(JSONObject json) {
         try {
+
+            if (json.has(ID))
+                id=json.getString(ID);
+
             if (json.has(MMSI))
                 mmsi = json.getString(MMSI);
 
@@ -154,9 +159,7 @@ public class Ship {
     }
 
     public void parseRoute(){
-
         mRoutePoints = setRoutePoints();
-        Log.d(TAG,"Set route points");
     }
     public LatLng[] getRoutePoints(){return mRoutePoints;}
     private LatLng[] setRoutePoints(){

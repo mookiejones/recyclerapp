@@ -4,14 +4,12 @@ import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.com.solutions.nerd.testapp.R;
-import android.com.solutions.nerd.testapp.db.ShipCursorWrapper;
 import android.com.solutions.nerd.testapp.db.ShipDatabase;
 import android.com.solutions.nerd.testapp.helpers.OnUpdateTimerListener;
 import android.com.solutions.nerd.testapp.main.MainActivity;
 import android.com.solutions.nerd.testapp.model.Ship;
 import android.com.solutions.nerd.testapp.model.TagInfo;
 import android.com.solutions.nerd.testapp.utils.PrefUtils;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +17,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -55,7 +52,6 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -87,8 +83,9 @@ public class MapFragment extends Fragment
         LocationListener,
         GoogleMap.OnInfoWindowClickListener {
     private static final String TAG = MapFragment.class.getSimpleName();
-    private static final String tileUrl = "http://earthncseamless.s3.amazonaws.com/{zoom}/{x}/{y}.png";
+    private static String tileUrl;
     private final static LatLng dearborn = new LatLng(42.3222600f, -83.1763100f);
+
 
     private SQLiteDatabase mDatabase;
     protected static List<Ship> mShips = new ArrayList<>();
@@ -125,6 +122,14 @@ public class MapFragment extends Fragment
         if (mInstance == null)
             mInstance = new MapFragment();
         return mInstance;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        tileUrl=getResources().getString(R.string.tile_url);
+
     }
 
     @Override
@@ -211,7 +216,6 @@ public class MapFragment extends Fragment
                 result = m;
                 break;
             }
-
         }
         return result;
     }
@@ -270,8 +274,14 @@ public class MapFragment extends Fragment
 
     }
 
+    private ShipAdapter mShipAdapter;
+
     @Override
     public void onCameraChange(CameraPosition cameraPosition){
+        LatLngBounds bnd = mMap.getProjection().getVisibleRegion().latLngBounds;
+        if(mShipAdapter!=null)
+            mShipAdapter.setBounds(bnd);
+
         if (cameraPosition.zoom > 15)
             return;
         if (updating_ships){
@@ -280,7 +290,6 @@ public class MapFragment extends Fragment
         }
         updateMarkers();
         updating_ships=true;
-//         LatLngBounds bnd = mMap.getProjection().getVisibleRegion().latLngBounds;
 
 //        task =   new ShipQueryAsyncTask(this);
 //        task.execute(bnd);
@@ -362,10 +371,10 @@ public class MapFragment extends Fragment
 
             }
         });
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+//        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+//        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+//        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         mMap.setContentDescription("Content Description");
 
 
@@ -378,12 +387,8 @@ public class MapFragment extends Fragment
         LatLng current = getCurrentLocation();
         if (current != null) {
             CameraPosition cp = new CameraPosition(current, 8, 0, 0);
-
             CameraUpdate cu = CameraUpdateFactory.newCameraPosition(cp);
-
-
             mMap.moveCamera(cu);
-
         }
 
 
@@ -427,17 +432,6 @@ public class MapFragment extends Fragment
         return true;
     }
 
-
-    /**
-     * Called when a shared preference is changed, added, or removed. This
-     * may be called even if a preference is set to its existing value.
-     * <p/>
-     * <p>This callback will be run on your main thread.
-     *
-     * @param sharedPreferences The {@link SharedPreferences} that received
-     *                          the change.
-     * @param key               The key of the preference that was changed, added, or
-     */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (Log.isLoggable(TAG, Log.DEBUG)) {
@@ -452,13 +446,6 @@ public class MapFragment extends Fragment
         }
     }
 
-    /**
-     * Called when the location has changed.
-     * <p/>
-     * <p> There are no restrictions on the use of the supplied Location object.
-     *
-     * @param location The new location, as a Location object.
-     */
     @Override
     public void onLocationChanged(Location location) {
 
@@ -466,31 +453,14 @@ public class MapFragment extends Fragment
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
-
         Log.d(TAG,"OnStatusChanged provider:"+provider+" status:"+String.valueOf(status));
     }
 
-    /**
-     * Called when the provider is enabled by the user.
-     *
-     * @param provider the name of the location provider associated with this
-     *                 update.
-     */
     @Override
     public void onProviderEnabled(String provider) {
         Log.d(TAG,"onProviderEnabled provider:"+provider);
-
     }
 
-    /**
-     * Called when the provider is disabled by the user. If requestLocationUpdates
-     * is called on an already disabled provider, this method is called
-     * immediately.
-     *
-     * @param provider the name of the location provider associated with this
-     *                 update.
-     */
     @Override
     public void onProviderDisabled(String provider) {
         Log.d(TAG,"onProviderDisabled provider:"+provider);
@@ -518,13 +488,7 @@ public class MapFragment extends Fragment
             Criteria criteria = new Criteria();
             String provider = locationManager.getBestProvider(criteria, false);
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+
                 String[] permissions = new String[]{
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION
@@ -588,7 +552,6 @@ public class MapFragment extends Fragment
 
     private void startListeningLocation() {
         locationManager = (LocationManager) this.getActivity().getSystemService(Context.LOCATION_SERVICE);
-
 
         // get shared preferences
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getBaseContext());
@@ -688,18 +651,21 @@ public class MapFragment extends Fragment
 
 
     private void updateMarkers() {
+        // Get Screen Size
         final int size =(int)(50*getResources().getDisplayMetrics().density);
-        mMap.clear();
         LatLngBounds bnd = mMap.getProjection().getVisibleRegion().latLngBounds;
+        List<Ship> ships=ShipDatabase.getShips(bnd);
+        mMap.clear();
 
-        for(Ship ship:ShipDatabase.getShips(bnd)){
+        for(Ship ship:ships){
             final LatLng[] points =  ship.getRoutePoints();
 
+            if (points!=null)
             for(LatLng latLng:ship.getRoutePoints()){
                 // Add a thin red line from London to New York.
-                Polyline line = mMap.addPolyline(new PolylineOptions()
+               mRouteLine= mMap.addPolyline(new PolylineOptions()
                         .add(points)
-                        .width(3)
+                        .width(getResources().getInteger(R.integer.route_width))
                         .color(Color.RED));
             }
             Bitmap boatImage = ship.getImage();
@@ -708,19 +674,13 @@ public class MapFragment extends Fragment
                     .snippet(ship.getMmsi())
                     .position(ship.getLocation());
 
-
-
             if (boatImage!=null){
 
-
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-
                 Bitmap bmp = Bitmap.createBitmap(size, size, conf);
-
                 Bitmap shipImage = Bitmap.createScaledBitmap(ship.getImage(),size,size,false);
 
                 Canvas c = new Canvas(bmp);
-
 
                 // paint defines the text color,
                 // stroke width, size
@@ -730,81 +690,11 @@ public class MapFragment extends Fragment
 
                 c.drawBitmap(shipImage, 0, 0, color);
 
-                if (!boatImage.isRecycled())
-                    boatImage.recycle();
 
                 // Need to get Correct Location for Text;
                 float textWidth=color.measureText(ship.getName());
                 float center = (size-textWidth)/2;
 
-
-
-                c.drawText(ship.getName(), center, 40, color);
-
-                marker.icon(BitmapDescriptorFactory.fromBitmap(bmp));
-                marker.anchor(0.5f, 1);
-            }
-
-
-
-
-            mMarkers.add(marker);
-            mMap.addMarker(marker);
-
-        }
-
-
-        /*
-
-        for (Ship ship:mShips) {
-            if (!bnd.contains(ship.getLocation()))
-                continue;
-
-            final LatLng[] points = ship.getRoutePoints();
-
-            for (LatLng latLng : ship.getRoutePoints()) {
-                // Add a thin red line from London to New York.
-                Polyline line = mMap.addPolyline(new PolylineOptions()
-                        .add(points)
-                        .width(3)
-                        .color(Color.RED));
-            }
-
-            Bitmap boatImage = ship.getImage();
-            MarkerOptions marker = new MarkerOptions()
-                    .title(ship.getName())
-                    .snippet(ship.getMmsi())
-                    .position(ship.getLocation());
-
-
-            if (boatImage != null) {
-
-
-                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-
-                Bitmap bmp = Bitmap.createBitmap(size, size, conf);
-
-                Bitmap shipImage = Bitmap.createScaledBitmap(ship.getImage(), size, size, false);
-
-                Canvas c = new Canvas(bmp);
-
-
-                // paint defines the text color,
-                // stroke width, size
-                Paint color = new Paint();
-                color.setTextSize(15);
-                color.setColor(Color.BLACK);
-
-                c.drawBitmap(shipImage, 0, 0, color);
-
-                if (!boatImage.isRecycled())
-                    boatImage.recycle();
-
-                // Need to get Correct Location for Text;
-                float textWidth = color.measureText(ship.getName());
-                float center = (size - textWidth) / 2;
-
-
                 c.drawText(ship.getName(), center, 40, color);
 
                 marker.icon(BitmapDescriptorFactory.fromBitmap(bmp));
@@ -814,24 +704,28 @@ public class MapFragment extends Fragment
 
             mMarkers.add(marker);
             mMap.addMarker(marker);
+
         }
-        */
+
+
+
+        final ShipAdapter adapter = new ShipAdapter(getContext(),ships.toArray(new Ship[ships.size()]));
+
+
+        mShipList.setAdapter(adapter);
     }
 
 
 
     @Override
-    public void QueryComplete(List<Ship> ships) {
-        for(Ship ship:ships){
-            ShipDatabase.addShip(ship);
-        }
-        mShips = ships;
+    public void QueryComplete(Ship[] ships) {
+        ShipDatabase.addShips(ships);
+
 
 
         updateMarkers();
-        final Ship[] shipList = mShips.toArray(new Ship[mShips.size()]);
-        final ListAdapter adapter = new ShipAdapter(getContext(),shipList);
-        mShipList.setAdapter(adapter);
+        //ships;
+
     }
 
 

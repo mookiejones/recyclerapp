@@ -18,9 +18,10 @@ import java.util.List;
  * Created by admin on 11/27/15.
  */
 public class ShipDatabase extends SQLiteOpenHelper {
-    public static final int VERSION=2;
+    public static final int VERSION=4;
     private static final String DATABASE_NAME="ships.db";
     private  static SQLiteDatabase mDb;
+
 
 
 
@@ -33,6 +34,7 @@ public class ShipDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db){
         db.execSQL("create table ships( _id integer primary key autoincrement, " +
+                        Ship.ID+" ,"+
                         Ship.CALLSIGN + " ," +
                         Ship.COURSE + " ," +
                         Ship.DESTINATION + " ," +
@@ -60,10 +62,19 @@ public class ShipDatabase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){
 
-
-
+        db.execSQL("DROP TABLE IF EXISTS ships");
+        onCreate(db);
     }
 
+    public static void addShips(Ship[] ships){
+        for(Ship ship:ships)
+            addShip(ship);
+    }
+
+    public static void addShips(List<Ship> ships){
+        for(Ship ship:ships)
+            addShip(ship);
+    }
 
     public static void addShip(Ship ship){
         ContentValues values = Ship.getContentValues(ship);
@@ -72,7 +83,7 @@ public class ShipDatabase extends SQLiteOpenHelper {
 
         ShipCursorWrapper cursor=queryShips(
                 Ship.MMSI+" = ?",
-                new String[]{ship.getMmsi()}
+                new String[]{mmsi}
         );
 
         try{

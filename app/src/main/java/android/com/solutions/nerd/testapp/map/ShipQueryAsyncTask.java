@@ -24,22 +24,22 @@ import java.util.List;
 /**
  * Created by cberman on 11/24/2015.
  */
-public class ShipQueryAsyncTask extends AsyncTask<LatLngBounds, Void, List<Ship>> {
+public class ShipQueryAsyncTask extends AsyncTask<LatLngBounds, Void, Ship[]> {
 
     public ShipQueryAsyncTask(OnShipQueryCompleteListener listener){
         super();
         mListener=listener;
     }
 
-
         private static final String url_path = "http://ais.boatnerd.com/ship-data.jsonp-alt.php?_1402627434151=";
         HttpURLConnection urlConnection = null;
 
         private OnShipQueryCompleteListener mListener;
         @Override
-        protected List<Ship> doInBackground(LatLngBounds... params) {
-            List<Ship> result = new ArrayList<>();
+        protected Ship[] doInBackground(LatLngBounds... params) {
 
+
+            List<Ship> result =new ArrayList<>();
             URL url = null;
             try {
                 String response = "";
@@ -62,7 +62,7 @@ public class ShipQueryAsyncTask extends AsyncTask<LatLngBounds, Void, List<Ship>
                 JSONArray jsonArray = new JSONArray(response);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     if (isCancelled())
-                        return result;
+                        return result.toArray(new Ship[result.size()]);
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     Ship ship = new Ship(jsonObject);
                     if (!ship.getPicture().isEmpty()){
@@ -85,7 +85,7 @@ public class ShipQueryAsyncTask extends AsyncTask<LatLngBounds, Void, List<Ship>
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return result;
+            return result.toArray(new Ship[result.size()]);
         }
 
         /**
@@ -100,7 +100,7 @@ public class ShipQueryAsyncTask extends AsyncTask<LatLngBounds, Void, List<Ship>
          * @see #onCancelled(Object)
          */
         @Override
-        protected void onPostExecute(List<Ship> ships) {
+        protected void onPostExecute(Ship[] ships) {
             if (isCancelled())
                 return;
 
@@ -110,7 +110,7 @@ public class ShipQueryAsyncTask extends AsyncTask<LatLngBounds, Void, List<Ship>
         }
 
     public interface OnShipQueryCompleteListener{
-        void QueryComplete(List<Ship> ships);
+        void QueryComplete(Ship[] ships);
     }
     public class AsyncParams{
         OnShipQueryCompleteListener mCallback;

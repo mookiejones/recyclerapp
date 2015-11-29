@@ -18,7 +18,7 @@ public class ShipCursorWrapper extends CursorWrapper {
 
     public Ship getShip(){
 
-        String id = getString(getColumnIndex("id"));
+        String id = getString(getColumnIndex(Ship.ID));
         String callsign = getString(getColumnIndex(Ship.CALLSIGN));
         String course = getString(getColumnIndex(Ship.COURSE));
         String destination = getString(getColumnIndex(Ship.DESTINATION));
@@ -48,7 +48,7 @@ public class ShipCursorWrapper extends CursorWrapper {
         ship.setDraft(draft);
         ship.setEta(eta);
         ship.setHeading(heading);
-        ship.setId(id);
+  //      ship.setId(id);
         ship.setImo(imo);
         ship.setLat(Double.parseDouble(lat));
         ship.setLng(Double.parseDouble(lng));
@@ -61,7 +61,8 @@ public class ShipCursorWrapper extends CursorWrapper {
         ship.setStatus(status);
         ship.setType(type);
         ship.setWidth(width);
-        ship.setImage(BitmapFactory.decodeByteArray(img,0,img.length));
+        if (img!=null)
+            ship.setImage(BitmapFactory.decodeByteArray(img,0,img.length));
 
         return ship;
     }
